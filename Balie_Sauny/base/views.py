@@ -30,3 +30,10 @@ class ReservationViewSet(viewsets.ModelViewSet):
         reservation = Reservation.objects.create(user=user, tub=tub, start_date=start_date, end_date=end_date, wait_status=True)
         serializer = ReservationSerializer(reservation)
         return Response({'message': 'Reservation created. Wait for acceptance by owner', 'result': serializer.data}, status=status.HTTP_201_CREATED)
+    
+    @action(detail=True, methods=['Get'])
+    def check_reservations(self, request, pk=None):
+        tub = get_object_or_404(Tub, pk=pk)
+        reservation = Reservation.objects.filter(tub=tub)
+        serializer = ReservationSerializer(reservation, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

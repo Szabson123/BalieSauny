@@ -9,4 +9,5 @@ router.register('reservations', ReservationViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('tubs/<int:pk>/create_reservation/', ReservationViewSet.as_view({'post': 'create_reservation'}), name='create-reservation'),
+    path('tubs/<int:pk>/check_reservations/', ReservationViewSet.as_view({'get': 'check_reservations'}), name='check-reservations')
 ]
