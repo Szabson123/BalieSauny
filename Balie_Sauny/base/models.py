@@ -15,7 +15,7 @@ class Tub(models.Model):
 
 class Reservation(models.Model):
     tub = models.ForeignKey(Tub, on_delete=models.CASCADE, related_name='reservations')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_reservations')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_reservations', null=True)
     start_date = models.DateField()
     end_date = models.DateField()
     nobody_status = models.BooleanField(default=True)
