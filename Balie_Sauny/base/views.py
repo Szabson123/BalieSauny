@@ -1,9 +1,10 @@
 from rest_framework import viewsets, status
-from .models import Tub, Reservation
-from .serializers import TubSerializer, ReservationSerializer
+from .models import Tub, Reservation, Rating
+from .serializers import TubSerializer, ReservationSerializer, RatingSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action
+
 
 class TubViewListSet(viewsets.ModelViewSet):
     queryset = Tub.objects.all()
@@ -52,4 +53,31 @@ class ReservationViewSet(viewsets.ModelViewSet):
         reservation.save()
         serializer = ReservationSerializer(reservation)
         return Response({'message': 'Reservation accepted', 'result': serializer.data}, status=status.HTTP_200_OK)
+
+
+class RatingViewSet(viewsets.ModelViewSet):
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+    
+    @action(detail=True, methods=['POST'])
+    def create_rating(self, request, pk=None):
+        tub = get_object_or_404(Tub, pk=pk)
+        user = self.request.user if request.user.is_authenticated else None
+        stars = request.data.get('stars')
         
+        if stars is not None:
+            try:
+                rating = Rating.objects.get(user=user, tub=tub)
+                rating.stars = stars
+                rating.save()
+                serializer = RatingSerializer(rating, many=False)
+                return Response({'message':'Rating updated', 'result': serializer.data}, status=status.HTTP_200_OK)
+            except Rating.DoesNotExist:
+                rating = Rating.objects.create(user=user, tub=tub, stars=stars)
+                serializer = RatingSerializer(rating, many=False)
+                return Response({'message': 'Rating Created', 'result': serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'You need to provide starts'}, status=status.HTTP_400_BAD_REQUEST)
+        
+                
+            

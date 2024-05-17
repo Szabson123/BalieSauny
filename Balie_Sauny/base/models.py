@@ -33,7 +33,7 @@ class Image(models.Model):
 
 
 class Rating(models.Model):
-    tub = models.ForeignKey(Tub, on_delete=models.CASCADE, related_name='ratings')
+    tub = models.ForeignKey(Tub, on_delete=models.CASCADE, related_name='ratings', null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_rating')
     stars = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     
