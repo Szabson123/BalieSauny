@@ -37,3 +37,9 @@ class ReservationViewSet(viewsets.ModelViewSet):
         reservation = Reservation.objects.filter(tub=tub)
         serializer = ReservationSerializer(reservation, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['GET'])
+    def all_reservations(self, request):
+        reservations = Reservation.objects.all(self.tub.name)
+        serializer = ReservationSerializer(reservations, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

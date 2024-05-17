@@ -15,8 +15,13 @@ class TubSerializer(serializers.ModelSerializer):
 
 
 class ReservationSerializer(serializers.ModelSerializer):
+    tub_name = serializers.SerializerMethodField()
+    
     class Meta:
         model = Reservation
-        fields = ['id', 'tub', 'user', 'start_date', 'end_date', 'nobody_status', 'wait_status', 'accepted_status']
+        fields = ['id', 'tub_name', 'user', 'start_date', 'end_date', 'nobody_status', 'wait_status', 'accepted_status']
+        
+    def get_tub_name(self, obj):
+        return obj.tub.name
 
     
