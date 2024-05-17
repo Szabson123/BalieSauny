@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Tub, Image, Reservation
+from .models import Tub, Image, Reservation, Rating
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,4 +24,13 @@ class ReservationSerializer(serializers.ModelSerializer):
     def get_tub_name(self, obj):
         return obj.tub.name
 
+
+class RatingSerializer(serializers.ModelSerializer):
+    tub_name = serializers.SerializerMethodField()
     
+    class Meta:
+        model = Rating
+        fields = ['id', 'tub_name', 'user', 'stars']
+        
+    def get_tub_name(self, obj):
+        return obj.tub.name
