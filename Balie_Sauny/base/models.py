@@ -36,6 +36,7 @@ class Rating(models.Model):
     tub = models.ForeignKey(Tub, on_delete=models.CASCADE, related_name='ratings', null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_rating')
     stars = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    desciption = models.TextField(null=True)
     
     class Meta:
         unique_together = (('user', 'tub'))

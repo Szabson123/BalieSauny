@@ -78,6 +78,13 @@ class RatingViewSet(viewsets.ModelViewSet):
                 return Response({'message': 'Rating Created', 'result': serializer.data}, status=status.HTTP_200_OK)
         else:
             return Response({'message':'You need to provide starts'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=True, methods=['GET'])
+    def rating_list(self, request, pk=None):
+        tub = get_object_or_404(Tub, pk=pk)
+        rating = Rating.objects.filter(tub=tub)
+        serializer = RatingSerializer(rating, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
         
                 
             

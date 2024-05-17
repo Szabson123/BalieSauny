@@ -30,7 +30,7 @@ class RatingSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Rating
-        fields = ['id', 'tub_name', 'user', 'stars']
+        fields = ['id', 'tub_name', 'user', 'stars', 'desciption']
         
     def get_tub_name(self, obj):
         return obj.tub.name
