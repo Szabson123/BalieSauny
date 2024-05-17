@@ -43,3 +43,13 @@ class ReservationViewSet(viewsets.ModelViewSet):
         reservations = Reservation.objects.all(self.tub.name)
         serializer = ReservationSerializer(reservations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['PATCH'])
+    def accept_reservation(self, request, pk=None):
+        reservation = get_object_or_404(Reservation, pk=pk)
+        reservation.wait_status = False
+        reservation.accepted_status = True
+        reservation.save()
+        serializer = ReservationSerializer(reservation)
+        return Response({'message': 'Reservation accepted', 'result': serializer.data}, status=status.HTTP_200_OK)
+        
