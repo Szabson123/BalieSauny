@@ -49,6 +49,7 @@ class Discount(models.Model):
     active = models.BooleanField(default=False)
     used = models.BooleanField(default=False)
     is_multi_use = models.BooleanField(default=False)
+    value = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)], null=True)
     
     def __str__(self) -> str:
-        return f'{self.main} to {self.tub.name}'
+         return f'{self.main} for {self.tub.name if self.tub else "any tub"}'

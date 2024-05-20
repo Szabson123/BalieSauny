@@ -39,4 +39,4 @@ class RatingSerializer(serializers.ModelSerializer):
 class DiscountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Discount
-        fields = ['tub', 'main', 'active', 'used', 'is_multi_use']
+        fields = ['tub', 'main', 'active', 'used', 'is_multi_use', 'value']

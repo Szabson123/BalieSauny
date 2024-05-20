@@ -4,7 +4,7 @@ from .serializers import TubSerializer, ReservationSerializer, RatingSerializer,
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action
-
+from decimal import Decimal
 
 class TubViewListSet(viewsets.ModelViewSet):
     queryset = Tub.objects.all()
@@ -87,4 +87,52 @@ class RatingViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
         
                 
-            
+class DiscountViewSet(viewsets.ModelViewSet):
+    queryset = Discount.objects.all()
+    serializer_class = DiscountSerializer
+    
+    
+    @action(detail=True, methods=['POST'])
+    def use_discount(self, request, pk=None):
+        discount = get_object_or_404(Discount, pk=pk)
+        tub_id = request.data.get('tub_id')
+        # tub = get_object_or_404(Tub, pk=tub_id)
+        
+        print(f"Received tub_id: {tub_id}")
+        
+        if not tub_id:
+            return Response({'message': 'tub_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        tub = get_object_or_404(Tub, pk=tub_id)
+
+        
+        if discount.tub != tub:
+            return Response({'message': 'This is not right code to this tub'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not discount.active:
+            return Response({'message': 'This Code is not avaible'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not discount.is_multi_use and discount.used:
+            return Response({'message': 'This Code has already beed used'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not discount.is_multi_use:
+            discount.used = True
+            discount.active = False
+        
+        discount_value = Decimal(discount.value) / Decimal(100)
+        discounted_price_per_day = tub.price_per_day * (Decimal(1) - discount_value)
+        
+        
+        discount.save()
+        
+        # Return the discounted price
+        response_data = {
+            'message': 'Discount applied successfully.',
+            'discounted_price_per_day': discounted_price_per_day,
+            'original_price_per_day': tub.price_per_day,
+            'discount_value': discount.value
+        }
+        
+        serializer = DiscountSerializer(discount)
+        return Response(response_data, status=status.HTTP_200_OK)
+    
