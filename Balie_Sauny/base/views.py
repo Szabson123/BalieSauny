@@ -14,37 +14,83 @@ class TubViewListSet(viewsets.ModelViewSet):
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
-    
-    @action(detail=True, methods=['POST'])
+
+    @action(detail=False, methods=['POST'])
     def create_reservation(self, request, pk=None):
-        tub = get_object_or_404(Tub, pk=pk)
+        discount_id = request.data.get('discount_id')
         user = request.user if request.user.is_authenticated else None
         start_date = request.data.get('start_date')
         end_date = request.data.get('end_date')
         
+        tub = get_object_or_404(Tub, pk=pk)
+
         if not start_date or not end_date:
             return Response({'message': 'Start Date and End Date are required'}, status=status.HTTP_400_BAD_REQUEST)
         
         if Reservation.objects.filter(tub=tub, start_date__lte=end_date, end_date__gte=start_date).exists():
             return Response({'message': 'This tub is already reserved for the selected dates'}, status=status.HTTP_400_BAD_REQUEST)
         
-        reservation = Reservation.objects.create(user=user, tub=tub, start_date=start_date, end_date=end_date, wait_status=True)
-        serializer = ReservationSerializer(reservation)
-        return Response({'message': 'Reservation created. Wait for acceptance by owner', 'result': serializer.data}, status=status.HTTP_201_CREATED)
-    
-    @action(detail=True, methods=['Get'])
+        price = tub.price_per_day
+        if discount_id:
+            discount = get_object_or_404(Discount, pk=discount_id)
+            
+            if discount.tub != tub:
+                return Response({'message': 'This is not the right code for this tub'}, status=status.HTTP_400_BAD_REQUEST)
+        
+            if not discount.active:
+                return Response({'message': 'This code is not available'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if not discount.is_multi_use and discount.used:
+                return Response({'message': 'This code has already been used'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            discount_value = Decimal(discount.value) / Decimal(100)
+            price = tub.price_per_day * (Decimal(1) - discount_value)
+            
+            if not discount.is_multi_use:
+                discount.used = True
+                discount.active = False
+            
+            discount.save()
+        
+        reservation = Reservation.objects.create(
+            user=user,
+            tub=tub,
+            price=price,
+            start_date=start_date,
+            end_date=end_date,
+            wait_status=True
+        )
+        if discount_id:
+            message = 'Reservation created, discount applied successfully. Wait for acceptance by owner'
+        else:
+            message = 'Reservation created. Wait for acceptance by owner'
+            
+        response_data = {
+            'message': 'Reservation created. Wait for acceptance by owner',
+            'result': ReservationSerializer(reservation).data
+        }
+        
+        if discount_id:
+            response_data['message'] = 'Reservation created, discount applied successfully. Wait for acceptance by owner'
+            response_data['discounted_price_per_day'] = price
+            response_data['original_price_per_day'] = tub.price_per_day
+            response_data['discount_value'] = f'{discount.value}%'
+        
+        return Response(response_data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=['GET'])
     def check_reservations(self, request, pk=None):
         tub = get_object_or_404(Tub, pk=pk)
-        reservation = Reservation.objects.filter(tub=tub)
-        serializer = ReservationSerializer(reservation, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
-    @action(detail=True, methods=['GET'])
-    def all_reservations(self, request):
-        reservations = Reservation.objects.all(self.tub.name)
+        reservations = Reservation.objects.filter(tub=tub)
         serializer = ReservationSerializer(reservations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
+    @action(detail=False, methods=['GET'])
+    def all_reservations(self, request):
+        reservations = Reservation.objects.all()
+        serializer = ReservationSerializer(reservations, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     @action(detail=True, methods=['PATCH'])
     def accept_reservation(self, request, pk=None):
         reservation = get_object_or_404(Reservation, pk=pk)
@@ -53,6 +99,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
         reservation.save()
         serializer = ReservationSerializer(reservation)
         return Response({'message': 'Reservation accepted', 'result': serializer.data}, status=status.HTTP_200_OK)
+
 
 
 class RatingViewSet(viewsets.ModelViewSet):
@@ -90,42 +137,35 @@ class RatingViewSet(viewsets.ModelViewSet):
 class DiscountViewSet(viewsets.ModelViewSet):
     queryset = Discount.objects.all()
     serializer_class = DiscountSerializer
-    
-    
+
     @action(detail=True, methods=['POST'])
     def use_discount(self, request, pk=None):
         discount = get_object_or_404(Discount, pk=pk)
         tub_id = request.data.get('tub_id')
-        # tub = get_object_or_404(Tub, pk=tub_id)
-        
-        print(f"Received tub_id: {tub_id}")
         
         if not tub_id:
             return Response({'message': 'tub_id is required'}, status=status.HTTP_400_BAD_REQUEST)
         
         tub = get_object_or_404(Tub, pk=tub_id)
 
-        
         if discount.tub != tub:
-            return Response({'message': 'This is not right code to this tub'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'This is not the right code for this tub'}, status=status.HTTP_400_BAD_REQUEST)
         
         if not discount.active:
-            return Response({'message': 'This Code is not avaible'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'This code is not available'}, status=status.HTTP_400_BAD_REQUEST)
         
         if not discount.is_multi_use and discount.used:
-            return Response({'message': 'This Code has already beed used'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'This code has already been used'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        discount_value = Decimal(discount.value) / Decimal(100)
+        discounted_price_per_day = tub.price_per_day * (Decimal(1) - discount_value)
         
         if not discount.is_multi_use:
             discount.used = True
             discount.active = False
         
-        discount_value = Decimal(discount.value) / Decimal(100)
-        discounted_price_per_day = tub.price_per_day * (Decimal(1) - discount_value)
-        
-        
         discount.save()
         
-        # Return the discounted price
         response_data = {
             'message': 'Discount applied successfully.',
             'discounted_price_per_day': discounted_price_per_day,
@@ -133,6 +173,4 @@ class DiscountViewSet(viewsets.ModelViewSet):
             'discount_value': discount.value
         }
         
-        serializer = DiscountSerializer(discount)
         return Response(response_data, status=status.HTTP_200_OK)
-    

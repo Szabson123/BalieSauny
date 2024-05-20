@@ -19,7 +19,7 @@ class ReservationSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Reservation
-        fields = ['id', 'tub_name', 'user', 'start_date', 'end_date', 'nobody_status', 'wait_status', 'accepted_status']
+        fields = ['id', 'tub_name', 'user', 'start_date', 'end_date', 'nobody_status', 'wait_status', 'accepted_status', 'price']
         
     def get_tub_name(self, obj):
         return obj.tub.name
