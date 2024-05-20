@@ -41,3 +41,14 @@ class Rating(models.Model):
     class Meta:
         unique_together = (('user', 'tub'))
         index_together = (('user', 'tub'))
+        
+
+class Discount(models.Model):
+    tub = models.ForeignKey(Tub, on_delete=models.CASCADE, null=True, related_name = 'tube_discount')
+    main = models.CharField(max_length=15)
+    active = models.BooleanField(default=False)
+    used = models.BooleanField(default=False)
+    is_multi_use = models.BooleanField(default=False)
+    
+    def __str__(self) -> str:
+        return f'{self.main} to {self.tub.name}'

@@ -1,6 +1,6 @@
 from rest_framework import viewsets, status
-from .models import Tub, Reservation, Rating
-from .serializers import TubSerializer, ReservationSerializer, RatingSerializer
+from .models import Tub, Reservation, Rating, Discount
+from .serializers import TubSerializer, ReservationSerializer, RatingSerializer, DiscountSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action
