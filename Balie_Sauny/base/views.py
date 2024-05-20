@@ -138,39 +138,4 @@ class DiscountViewSet(viewsets.ModelViewSet):
     queryset = Discount.objects.all()
     serializer_class = DiscountSerializer
 
-    @action(detail=True, methods=['POST'])
-    def use_discount(self, request, pk=None):
-        discount = get_object_or_404(Discount, pk=pk)
-        tub_id = request.data.get('tub_id')
-        
-        if not tub_id:
-            return Response({'message': 'tub_id is required'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        tub = get_object_or_404(Tub, pk=tub_id)
 
-        if discount.tub != tub:
-            return Response({'message': 'This is not the right code for this tub'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        if not discount.active:
-            return Response({'message': 'This code is not available'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        if not discount.is_multi_use and discount.used:
-            return Response({'message': 'This code has already been used'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        discount_value = Decimal(discount.value) / Decimal(100)
-        discounted_price_per_day = tub.price_per_day * (Decimal(1) - discount_value)
-        
-        if not discount.is_multi_use:
-            discount.used = True
-            discount.active = False
-        
-        discount.save()
-        
-        response_data = {
-            'message': 'Discount applied successfully.',
-            'discounted_price_per_day': discounted_price_per_day,
-            'original_price_per_day': tub.price_per_day,
-            'discount_value': discount.value
-        }
-        
-        return Response(response_data, status=status.HTTP_200_OK)
