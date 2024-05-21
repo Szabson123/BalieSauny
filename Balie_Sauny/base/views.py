@@ -1,6 +1,6 @@
 from rest_framework import viewsets, status
-from .models import Tub, Reservation, Rating, Discount
-from .serializers import TubSerializer, ReservationSerializer, RatingSerializer, DiscountSerializer
+from .models import Tub, Reservation, Rating, Discount, Faq
+from .serializers import TubSerializer, ReservationSerializer, RatingSerializer, DiscountSerializer, FaqSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -139,3 +139,6 @@ class DiscountViewSet(viewsets.ModelViewSet):
     serializer_class = DiscountSerializer
 
 
+class FaqViewSer(viewsets.ModelViewSet):
+    queryset = Faq
+    serializer_class = FaqSerializer
