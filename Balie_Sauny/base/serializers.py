@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Tub, Image, Reservation, Rating, Discount
+from .models import Tub, Image, Reservation, Rating, Discount, Faq
+
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,3 +41,9 @@ class DiscountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Discount
         fields = ['tub', 'main', 'active', 'used', 'is_multi_use', 'value']
+        
+
+class FaqSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Faq
+        fields = ['id', 'question', 'answer']

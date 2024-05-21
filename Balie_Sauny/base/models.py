@@ -54,3 +54,8 @@ class Discount(models.Model):
     
     def __str__(self) -> str:
          return f'{self.main} for {self.tub.name if self.tub else "any tub"}'
+     
+
+class Faq(models.Model):
+    question = models.CharField(max_length=255, null=True, blank=True)
+    answer = models.CharField(max_length=511, null=True, blank=True)
