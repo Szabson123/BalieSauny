@@ -1,0 +1,49 @@
+.logo{
+    height: 70px;
+    width: auto;
+}
+body{
+    margin: 0;
+    background-color: #e8ece8;
+}
+header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+}
+html{
+    margin: 0;
+}
+nav{
+  padding-top: 5em;
+  width: 100%;
+  background-color: white;
+  position: fixed;
+}
+.navbar{
+    display: flex;
+    list-style: none;
+    justify-content: space-between;
+    margin-left: 10em;
+    align-items: center;
+    justify-content: center;
+}
+.navbar li{
+    display: inline-block;
+    margin-right: 3.5rem;
+}
+.navbar li a{
+    font-family: "Dosis", sans-serif;
+    font-weight: 400;
+    font-size: larger;
+    font-style: normal;
+    padding-right: 20px;
+    padding-left: 20px;
+    text-decoration: none;
+    color: black;
+}
+.conteiner{
+    margin-left: 10%;
+    margin-right: 10%;
+}
