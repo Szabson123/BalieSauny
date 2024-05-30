@@ -8,7 +8,7 @@ class Tub(models.Model):
     description = models.TextField()
     price_per_day = models.DecimalField(max_digits=10, decimal_places=2)
     price_per_week = models.DecimalField(max_digits=10, decimal_places=2)
-    # img
+    logo_img = models.ImageField(upload_to='logo_tub/', null=True)
     
     def __str__(self) -> str:
         return self.name
