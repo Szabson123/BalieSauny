@@ -1,9 +1,20 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReservationService {
 
-  constructor() { }
+  private apiUrl = "http://127.0.0.1:8000/api/reservations/"
+
+
+  constructor(private http: HttpClient) { }
+
+  getReservationByTub(tubId: number): Observable<any>{
+    return this.http.get(`${this.apiUrl}?tub=${tubId}`)
+  }
+
 }
