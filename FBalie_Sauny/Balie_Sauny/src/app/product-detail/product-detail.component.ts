@@ -1,31 +1,39 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { TubService } from '../services/tub.service';
+import { HttpClientModule } from '@angular/common/http';
 import { ReservationService } from '../services/reservation.service';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
-
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
   imports: [RouterModule, HttpClientModule, CommonModule],
-  providers: [TubService, ReservationService],
+  providers: [ReservationService],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css']
 })
-export class ProductDetailComponent implements OnInit{
-  @Input() tubId!: number;
+export class ProductDetailComponent implements OnInit {
+  tubId!: number;
+  reservation: any[] = [];
 
-  reservation: any[] = []
-
-  constructor(private reservationService: ReservationService) {}
-
+  constructor(
+    private route: ActivatedRoute,
+    private reservationService: ReservationService
+  ) {}
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.tubId = +params.get('id')!; // Pobierz 'id' z parametrów URL i konwertuj na liczbę
+      console.log('Tub ID:', this.tubId);
+      this.loadReservations();
+    });
+  }
+
+  loadReservations(): void {
     this.reservationService.getReservationByTub(this.tubId).subscribe(data => {
       this.reservation = data;
-      console.log(this.reservation)
-    })
+      console.log(this.reservation);
+    });
   }
 }
