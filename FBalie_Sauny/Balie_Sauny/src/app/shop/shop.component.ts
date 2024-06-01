@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, HttpClientModule, RouterModule],
   providers: [TubService],
   templateUrl: './shop.component.html',
-  styleUrl: './shop.component.css'
+  styleUrls: ['./shop.component.css']
 })
 export class ShopComponent implements OnInit {
   tubs: any[] = [];
