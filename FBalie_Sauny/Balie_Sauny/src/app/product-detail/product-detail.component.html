@@ -8,3 +8,17 @@
     {{res.start_date}}
     {{res.end_date}}
 </div>
+<div>
+    {{ tub.name }}
+    <div class="container mt-3">
+        <h2>Product Detail</h2>
+        <div *ngIf="tub">
+          <h3>{{ tub.name }}</h3>
+        </div>
+        <div class="calendar-container">
+            <full-calendar [options]="calendarOptions"></full-calendar>
+        </div>
+    </div>
+</div>
+
+
