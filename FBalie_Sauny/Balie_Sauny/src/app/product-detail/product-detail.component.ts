@@ -27,7 +27,8 @@ export class ProductDetailComponent implements OnInit {
     calendarOptions: CalendarOptions = {
         initialView: 'dayGridMonth',
         plugins: [dayGridPlugin, interactionPlugin],
-        dateClick: this.handleDateClick.bind(this)
+        dateClick: this.handleDateClick.bind(this),
+        events: [] // Initial empty events
     };
 
     constructor(
@@ -61,10 +62,42 @@ export class ProductDetailComponent implements OnInit {
     handleDateClick(arg: any) {
         if (this.selectedDates.length < 2) {
             this.selectedDates.push(arg.date);
-            console.log('Selected Dates:', this.selectedDates);
         } else {
             this.selectedDates = [arg.date];
-            console.log('Selected Dates:', this.selectedDates);
         }
+
+        // Update calendar events
+        this.updateCalendarEvents();
+
+        // Print date information if two dates are selected
+        if (this.selectedDates.length === 2) {
+            this.printDateInfo();
+        }
+    }
+
+    updateCalendarEvents() {
+        const events = this.selectedDates.map(date => ({
+            title: 'Selected',
+            start: date,
+            allDay: true,
+            display: 'background',
+            backgroundColor: 'yellow'
+        }));
+
+        this.calendarOptions = {
+            ...this.calendarOptions,
+            events: events
+        };
+    }
+
+    printDateInfo() {
+        const startDate = this.selectedDates[0];
+        const endDate = this.selectedDates[1];
+        const timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
+        const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // Including both start and end date
+
+        console.log('Start Date:', startDate);
+        console.log('End Date:', endDate);
+        console.log('Number of Days:', diffDays);
     }
 }
