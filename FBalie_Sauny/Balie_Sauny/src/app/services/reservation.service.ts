@@ -14,4 +14,7 @@ export class ReservationService {
   getReservationByTub(tubId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}${tubId}/check_reservations/`);
   }
+  createReservation(tubId: number, data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}${tubId}/create_reservation/`, data);
+  }
 }
