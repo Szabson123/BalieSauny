@@ -29,10 +29,10 @@ class Reservation(models.Model):
 
 
 class Address(models.Model):
-    reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE(), related_name='address_to_reservation')
-    city = models.CharField(max_lenght=100)
-    street = models.CharField(max_lenght=100)
-    home_number = models.CharField(max_lenght=100)
+    reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE, related_name='address_to_reservation')
+    city = models.CharField(max_length=100)
+    street = models.CharField(max_length=100)
+    home_number = models.CharField(max_length=100)
     
 
 class Image(models.Model):
