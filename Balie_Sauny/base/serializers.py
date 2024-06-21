@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Tub, Image, Reservation, Rating, Discount, Faq
+from .models import Tub, Image, Reservation, Rating, Discount, Faq, Address
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -13,17 +13,6 @@ class TubSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tub
         fields = ['id', 'name', 'description', 'price_per_day', 'price_per_week', 'images', 'logo_img']
-
-
-class ReservationSerializer(serializers.ModelSerializer):
-    tub_name = serializers.SerializerMethodField()
-    
-    class Meta:
-        model = Reservation
-        fields = ['id', 'tub_name', 'user', 'start_date', 'end_date', 'nobody_status', 'wait_status', 'accepted_status', 'price']
-        
-    def get_tub_name(self, obj):
-        return obj.tub.name
 
 
 class RatingSerializer(serializers.ModelSerializer):
@@ -47,3 +36,22 @@ class FaqSerializer(serializers.ModelSerializer):
     class Meta:
         model = Faq
         fields = ['id', 'question', 'answer']
+        
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = ['city', 'street', 'home_number']
+
+class ReservationSerializer(serializers.ModelSerializer):
+    address = AddressSerializer()
+
+    class Meta:
+        model = Reservation
+        fields = ['id', 'tub', 'user', 'price', 'start_date', 'end_date', 'nobody_status', 'wait_status', 'accepted_status', 'address']
+
+    def create(self, validated_data):
+        address_data = validated_data.pop('address')
+        reservation = Reservation.objects.create(**validated_data)
+        Address.objects.create(reservation=reservation, **address_data)
+        return reservation

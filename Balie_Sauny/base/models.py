@@ -26,6 +26,13 @@ class Reservation(models.Model):
     
     def __str__(self) -> str:
         return f'Reservation by {self.user} on {self.tub.name}'
+
+
+class Address(models.Model):
+    reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE(), related_name='address_to_reservation')
+    city = models.CharField(max_lenght=100)
+    street = models.CharField(max_lenght=100)
+    home_number = models.CharField(max_lenght=100)
     
 
 class Image(models.Model):
