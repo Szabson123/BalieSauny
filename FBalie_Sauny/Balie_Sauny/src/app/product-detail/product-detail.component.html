@@ -1,0 +1,28 @@
+<div class="product-detail">
+    <p>product-detail works!</p>
+    <br>
+    <br>
+    <p>Tutaj</p>
+    <h2>Reservations</h2>
+    <div *ngFor="let res of reservation">
+      {{res.tub_name}}
+      {{res.start_date}}
+      {{res.end_date}}
+    </div>
+    <div>
+      {{ tub.name }}
+      <div class="container mt-3">
+        <h2>Product Detail</h2>
+        <div *ngIf="tub">
+          <h3>{{ tub.name }}</h3>
+          <h4>{{ tub.price_per_day }}</h4>
+        </div>
+        <div class="calendar-container">
+          <!-- Kalendarz z referencją #calendar -->
+          <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+          <button *ngIf="selectedDates.length === 2" (click)="goToReservationForm()">Dalej</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

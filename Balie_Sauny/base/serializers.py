@@ -12,7 +12,7 @@ class TubSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
     class Meta:
         model = Tub
-        fields = ['id', 'name', 'description', 'price_per_day', 'price_per_week', 'images']
+        fields = ['id', 'name', 'description', 'price_per_day', 'price_per_week', 'images', 'logo_img']
 
 
 class ReservationSerializer(serializers.ModelSerializer):

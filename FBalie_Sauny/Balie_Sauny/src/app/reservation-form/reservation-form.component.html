@@ -1,0 +1,28 @@
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="reservation-form-container">
+    <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
+      <div>
+        <label>Start Date</label>
+        <span>{{ startDate }}</span>
+      </div>
+      <div>
+        <label>End Date</label>
+        <span>{{ endDate }}</span>
+      </div>
+      <div>
+        <label>Total Price</label>
+        <span>{{ totalPrice }}</span>
+      </div>
+      <div>
+        <label for="address">Address</label>
+        <input id="address" formControlName="address" type="text">
+      </div>
+      <button type="submit" [disabled]="reservationForm.invalid">Create Reservation</button>
+    </form>
+  </div>
