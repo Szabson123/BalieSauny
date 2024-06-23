@@ -10,7 +10,6 @@ import { HttpClientModule } from '@angular/common/http';
   templateUrl: './reservations-to-accept.component.html',
   styleUrls: ['./reservations-to-accept.component.css'],
   providers: [ReservationService]
-
 })
 export class ReservationsToAcceptComponent implements OnInit {
   pendingReservations: any[] = [];
@@ -28,6 +27,18 @@ export class ReservationsToAcceptComponent implements OnInit {
       },
       error => {
         console.error('Error fetching pending reservations', error);
+      }
+    );
+  }
+
+  acceptReservation(reservationId: number): void {
+    this.reservationService.acceptReservation(reservationId).subscribe(
+      response => {
+        console.log('Reservation accepted', response);
+        this.fetchPendingReservations(); 
+      },
+      error => {
+        console.error('Error accepting reservation', error);
       }
     );
   }

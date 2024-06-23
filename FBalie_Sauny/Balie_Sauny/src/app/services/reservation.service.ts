@@ -21,4 +21,8 @@ export class ReservationService {
   getPendingReservations(): Observable<any> {
     return this.http.get(`${this.apiUrl}/reservations/pending_reservations/`);
   }
+  
+  acceptReservation(reservationId: number): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/reservations/${reservationId}/accept_reservation/`, {});
+  }
 }
