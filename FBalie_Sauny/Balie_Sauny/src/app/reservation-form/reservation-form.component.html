@@ -6,23 +6,32 @@
 <br>
 <br>
 <div class="reservation-form-container">
-    <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
-      <div>
-        <label>Start Date</label>
-        <span>{{ startDate }}</span>
-      </div>
-      <div>
-        <label>End Date</label>
-        <span>{{ endDate }}</span>
-      </div>
-      <div>
-        <label>Total Price</label>
-        <span>{{ totalPrice }}</span>
-      </div>
-      <div>
-        <label for="address">Address</label>
-        <input id="address" formControlName="address" type="text">
-      </div>
-      <button type="submit" [disabled]="reservationForm.invalid">Create Reservation</button>
-    </form>
-  </div>
+  <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label>Start Date</label>
+      <span>{{ startDate }}</span>
+    </div>
+    <div>
+      <label>End Date</label>
+      <span>{{ endDate }}</span>
+    </div>
+    <div>
+      <label>Total Price</label>
+      <span>{{ totalPrice }}</span>
+    </div>
+    <div>
+      <label for="city">City</label>
+      <input id="city" formControlName="city" type="text">
+    </div>
+    <div>
+      <label for="street">Street</label>
+      <input id="street" formControlName="street" type="text">
+    </div>
+    <div>
+      <label for="home_number">Home Number</label>
+      <input id="home_number" formControlName="home_number" type="text">
+    </div>
+    <button type="submit" [disabled]="reservationForm.invalid">Create Reservation</button>
+  </form>
+</div>
+

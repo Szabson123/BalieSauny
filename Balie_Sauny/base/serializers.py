@@ -50,11 +50,17 @@ class AddressSerializer(serializers.ModelSerializer):
         fields = ['city', 'street', 'home_number']
 
 class ReservationSerializer(serializers.ModelSerializer):
-    address = AddressSerializer()
+    address = serializers.SerializerMethodField()
 
     class Meta:
         model = Reservation
         fields = ['id', 'tub', 'user', 'price', 'start_date', 'end_date', 'nobody_status', 'wait_status', 'accepted_status', 'address']
+
+    def get_address(self, obj):
+        address = Address.objects.filter(reservation=obj).first()
+        if address:
+            return AddressSerializer(address).data
+        return None
 
     def create(self, validated_data):
         address_data = validated_data.pop('address')

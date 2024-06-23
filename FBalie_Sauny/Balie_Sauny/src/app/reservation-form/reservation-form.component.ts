@@ -20,44 +20,46 @@ export class ReservationFormComponent implements OnInit {
   startDate: string = '';
   endDate: string = '';
   totalPrice: number = 0;
-  tub: any = {}; // Dodanie właściwości tub
+  tub: any = {};
 
   constructor(
     private fb: FormBuilder,
     private reservationService: ReservationService,
-    private tubService: TubService, // Dodanie serwisu tub
+    private tubService: TubService,
     private route: ActivatedRoute,
     private router: Router
   ) {
     this.reservationForm = this.fb.group({
-      address: ['', Validators.required]
+      city: ['', Validators.required],
+      street: ['', Validators.required],
+      home_number: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.tubId = +params.get('id')!;
-      this.loadTubInfo(); // Pobieranie informacji o tubie
+      this.loadTubInfo();
     });
 
     this.route.queryParamMap.subscribe(params => {
       this.startDate = params.get('start_date')!;
       this.endDate = params.get('end_date')!;
-      this.calculateTotalPrice(); // Ponowne obliczenie ceny po ustawieniu dat
+      this.calculateTotalPrice();
     });
   }
 
   loadTubInfo(): void {
     this.tubService.getTub(this.tubId).subscribe(data => {
       this.tub = data;
-      console.log('Tub data loaded:', this.tub); // Dodane logowanie
-      this.calculateTotalPrice(); // Obliczanie ceny po pobraniu danych o tubie
+      console.log('Tub data loaded:', this.tub);
+      this.calculateTotalPrice();
     });
   }
 
   calculateTotalPrice() {
     if (!this.startDate || !this.endDate || !this.tub.price_per_day) {
-      console.log('Missing data for price calculation'); // Dodane logowanie
+      console.log('Missing data for price calculation');
       return;
     }
 
@@ -66,8 +68,8 @@ export class ReservationFormComponent implements OnInit {
     const timeDiff = Math.abs(end.getTime() - start.getTime());
     const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
 
-    this.totalPrice = diffDays * parseFloat(this.tub.price_per_day); // Obliczanie całkowitej ceny
-    console.log('Total price calculated:', this.totalPrice); // Dodane logowanie
+    this.totalPrice = diffDays * parseFloat(this.tub.price_per_day);
+    console.log('Total price calculated:', this.totalPrice);
   }
 
   onSubmit() {
@@ -80,7 +82,7 @@ export class ReservationFormComponent implements OnInit {
       this.reservationService.createReservation(this.tubId, formData).subscribe(
         response => {
           console.log('Reservation created successfully', response);
-          this.router.navigate(['/reservations']); // Przekierowanie po utworzeniu rezerwacji
+          this.router.navigate(['/shop']);
         },
         error => {
           console.error('Error creating reservation', error);

@@ -1,6 +1,6 @@
 from rest_framework import viewsets, status, generics
 from .models import Tub, Reservation, Rating, Discount, Faq
-from .serializers import TubSerializer, ReservationSerializer, RatingSerializer, DiscountSerializer, FaqSerializer, AddTubSerializer
+from .serializers import TubSerializer, ReservationSerializer, RatingSerializer, DiscountSerializer, FaqSerializer, AddTubSerializer, Address
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -20,13 +20,18 @@ class ReservationViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
 
-    @action(detail=False, methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def create_reservation(self, request, pk=None):
-        discount_id = request.data.get('discount_id')
         user = request.user if request.user.is_authenticated else None
         start_date = request.data.get('start_date')
         end_date = request.data.get('end_date')
-        
+        address_data = {
+            'city': request.data.get('city'),
+            'street': request.data.get('street'),
+            'home_number': request.data.get('home_number')
+        }
+        discount_id = request.data.get('discount_id')
+
         tub = get_object_or_404(Tub, pk=pk)
 
         if not start_date or not end_date:
@@ -34,7 +39,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
         
         if Reservation.objects.filter(tub=tub, start_date__lte=end_date, end_date__gte=start_date).exists():
             return Response({'message': 'This tub is already reserved for the selected dates'}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         price = tub.price_per_day
         if discount_id:
             discount = get_object_or_404(Discount, pk=discount_id)
@@ -56,7 +61,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
                 discount.active = False
             
             discount.save()
-        
+
         reservation = Reservation.objects.create(
             user=user,
             tub=tub,
@@ -65,22 +70,23 @@ class ReservationViewSet(viewsets.ModelViewSet):
             end_date=end_date,
             wait_status=True
         )
-        if discount_id:
-            message = 'Reservation created, discount applied successfully. Wait for acceptance by owner'
-        else:
-            message = 'Reservation created. Wait for acceptance by owner'
-            
+
+        Address.objects.create(
+            reservation=reservation,
+            **address_data
+        )
+
         response_data = {
             'message': 'Reservation created. Wait for acceptance by owner',
             'result': ReservationSerializer(reservation).data
         }
-        
+
         if discount_id:
             response_data['message'] = 'Reservation created, discount applied successfully. Wait for acceptance by owner'
             response_data['discounted_price_per_day'] = price
             response_data['original_price_per_day'] = tub.price_per_day
             response_data['discount_value'] = f'{discount.value}%'
-        
+
         return Response(response_data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=['GET'])
@@ -104,7 +110,6 @@ class ReservationViewSet(viewsets.ModelViewSet):
         reservation.save()
         serializer = ReservationSerializer(reservation)
         return Response({'message': 'Reservation accepted', 'result': serializer.data}, status=status.HTTP_200_OK)
-
 
 
 class RatingViewSet(viewsets.ModelViewSet):
