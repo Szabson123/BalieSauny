@@ -6,15 +6,19 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ReservationService {
-
-  private apiUrl = "http://127.0.0.1:8000/api/tubs/";
+  private apiUrl = "http://127.0.0.1:8000/api"; // Zaktualizuj URL do swojego API
 
   constructor(private http: HttpClient) { }
 
   getReservationByTub(tubId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}${tubId}/check_reservations/`);
+    return this.http.get(`${this.apiUrl}/tubs/${tubId}/check_reservations/`);
   }
+
   createReservation(tubId: number, data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}${tubId}/create_reservation/`, data);
+    return this.http.post(`${this.apiUrl}/tubs/${tubId}/create_reservation/`, data);
+  }
+
+  getPendingReservations(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/reservations/pending_reservations/`);
   }
 }

@@ -1,0 +1,19 @@
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div class="pending-reservations">
+    <h2>Pending Reservations</h2>
+    <ul>
+      <li *ngFor="let res of pendingReservations">
+        Tub: {{ res.tub.name }}, 
+        User: {{ res.user.username }}, 
+        Start Date: {{ res.start_date | date }}, 
+        End Date: {{ res.end_date | date }},
+        Price: {{ res.price | currency }}
+      </li>
+    </ul>
+  </div>

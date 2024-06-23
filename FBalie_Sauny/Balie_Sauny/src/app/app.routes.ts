@@ -5,6 +5,7 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
 import { ShopComponent } from './shop/shop.component';
 import { ReservationFormComponent } from './reservation-form/reservation-form.component';
 import { AddTubComponent } from './add-tub/add-tub.component';
+import { ReservationsToAcceptComponent } from './reservations-to-accept/reservations-to-accept.component';
 
 
 export const routes: Routes = [
@@ -13,6 +14,7 @@ export const routes: Routes = [
     { path: 'shop/:id', component: ProductDetailComponent},
     { path: 'shop/:id/reservation', component: ReservationFormComponent },
     { path: 'add-tub', component: AddTubComponent },
+    { path: 'reservations-to-accept', component: ReservationsToAcceptComponent },
 ];
 
 @NgModule({

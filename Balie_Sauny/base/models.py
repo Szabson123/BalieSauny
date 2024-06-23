@@ -20,6 +20,7 @@ class Reservation(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
+    counted_price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     nobody_status = models.BooleanField(default=True, null=True, blank=True)
     wait_status = models.BooleanField(default=False, null=True, blank=True)
     accepted_status = models.BooleanField(default=False, null=True, blank=True)

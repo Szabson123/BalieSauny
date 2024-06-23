@@ -110,6 +110,18 @@ class ReservationViewSet(viewsets.ModelViewSet):
         reservation.save()
         serializer = ReservationSerializer(reservation)
         return Response({'message': 'Reservation accepted', 'result': serializer.data}, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['GET'])
+    def accepted_reservations(self, request):
+        reservations = Reservation.objects.filter(accepted_status=True)
+        serializer = ReservationSerializer(reservations, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['GET'])
+    def pending_reservations(self, request):
+        reservations = Reservation.objects.filter(accepted_status=False)
+        serializer = ReservationSerializer(reservations, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class RatingViewSet(viewsets.ModelViewSet):
