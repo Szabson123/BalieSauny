@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { TubService } from '../services/tub.service';
+import { Router } from '@angular/router'; 
 
 @Component({
   selector: 'app-add-tub',
@@ -15,7 +16,7 @@ import { TubService } from '../services/tub.service';
 export class AddTubComponent {
   tubForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private tubService: TubService) {
+  constructor(private fb: FormBuilder, private tubService: TubService, private router: Router) {
     this.tubForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
@@ -34,6 +35,7 @@ export class AddTubComponent {
 
       this.tubService.addTub(formData).subscribe(response => {
         console.log('Tub added successfully', response);
+        this.router.navigate(['/shop']);
       });
     }
   }
