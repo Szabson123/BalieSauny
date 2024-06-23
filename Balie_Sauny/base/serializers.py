@@ -15,6 +15,12 @@ class TubSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'description', 'price_per_day', 'price_per_week', 'images', 'logo_img']
 
 
+class AddTubSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tub
+        fields = ['id', 'name', 'description', 'price_per_day', 'price_per_week', 'logo_img']
+
+
 class RatingSerializer(serializers.ModelSerializer):
     tub_name = serializers.SerializerMethodField()
     

@@ -1,6 +1,6 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from .models import Tub, Reservation, Rating, Discount, Faq
-from .serializers import TubSerializer, ReservationSerializer, RatingSerializer, DiscountSerializer, FaqSerializer
+from .serializers import TubSerializer, ReservationSerializer, RatingSerializer, DiscountSerializer, FaqSerializer, AddTubSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -9,6 +9,11 @@ from decimal import Decimal
 class TubViewListSet(viewsets.ModelViewSet):
     queryset = Tub.objects.all()
     serializer_class = TubSerializer
+
+
+class AddTubView(generics.CreateAPIView):
+    queryset = Tub.objects.all()
+    serializer_class = AddTubSerializer
 
 
 class ReservationViewSet(viewsets.ModelViewSet):
