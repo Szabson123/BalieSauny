@@ -54,7 +54,7 @@ class ReservationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reservation
-        fields = ['id', 'tub', 'user', 'price', 'start_date', 'end_date', 'nobody_status', 'wait_status', 'accepted_status', 'address']
+        fields = ['id', 'tub', 'user', 'price', 'counted_price', 'start_date', 'end_date', 'nobody_status', 'wait_status', 'accepted_status', 'address']
 
     def get_address(self, obj):
         address = Address.objects.filter(reservation=obj).first()

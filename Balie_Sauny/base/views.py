@@ -41,6 +41,8 @@ class ReservationViewSet(viewsets.ModelViewSet):
             return Response({'message': 'This tub is already reserved for the selected dates'}, status=status.HTTP_400_BAD_REQUEST)
 
         price = tub.price_per_day
+        counted_price = Decimal(request.data.get('counted_price', price))  # Pobranie counted_price z requesta
+
         if discount_id:
             discount = get_object_or_404(Discount, pk=discount_id)
             
@@ -54,7 +56,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
                 return Response({'message': 'This code has already been used'}, status=status.HTTP_400_BAD_REQUEST)
             
             discount_value = Decimal(discount.value) / Decimal(100)
-            price = tub.price_per_day * (Decimal(1) - discount_value)
+            counted_price = price * (Decimal(1) - discount_value)
             
             if not discount.is_multi_use:
                 discount.used = True
@@ -66,6 +68,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
             user=user,
             tub=tub,
             price=price,
+            counted_price=counted_price,
             start_date=start_date,
             end_date=end_date,
             wait_status=True
@@ -83,8 +86,8 @@ class ReservationViewSet(viewsets.ModelViewSet):
 
         if discount_id:
             response_data['message'] = 'Reservation created, discount applied successfully. Wait for acceptance by owner'
-            response_data['discounted_price_per_day'] = price
-            response_data['original_price_per_day'] = tub.price_per_day
+            response_data['discounted_price_per_day'] = counted_price
+            response_data['original_price_per_day'] = price
             response_data['discount_value'] = f'{discount.value}%'
 
         return Response(response_data, status=status.HTTP_201_CREATED)
@@ -110,7 +113,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
         reservation.save()
         serializer = ReservationSerializer(reservation)
         return Response({'message': 'Reservation accepted', 'result': serializer.data}, status=status.HTTP_200_OK)
-    
+
     @action(detail=False, methods=['GET'])
     def accepted_reservations(self, request):
         reservations = Reservation.objects.filter(accepted_status=True)
@@ -122,6 +125,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
         reservations = Reservation.objects.filter(accepted_status=False)
         serializer = ReservationSerializer(reservations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 class RatingViewSet(viewsets.ModelViewSet):

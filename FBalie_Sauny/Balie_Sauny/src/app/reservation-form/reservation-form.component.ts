@@ -32,7 +32,7 @@ export class ReservationFormComponent implements OnInit {
     this.reservationForm = this.fb.group({
       city: ['', Validators.required],
       street: ['', Validators.required],
-      home_number: ['', Validators.required]
+      home_number: ['', Validators.required],
     });
   }
 
@@ -77,7 +77,7 @@ export class ReservationFormComponent implements OnInit {
       const formData = this.reservationForm.value;
       formData.start_date = this.startDate;
       formData.end_date = this.endDate;
-      formData.price = this.totalPrice;
+      formData.counted_price = this.totalPrice;
 
       this.reservationService.createReservation(this.tubId, formData).subscribe(
         response => {
