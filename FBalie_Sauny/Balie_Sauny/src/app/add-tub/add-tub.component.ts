@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { TubService } from '../services/tub.service';
-import { Router } from '@angular/router'; 
 
 @Component({
   selector: 'app-add-tub',
@@ -22,7 +22,7 @@ export class AddTubComponent {
       description: ['', Validators.required],
       price_per_day: ['', Validators.required],
       price_per_week: ['', Validators.required],
-      // logo_img: ['', Validators.null]
+      logo_img: [null, Validators.required]
     });
   }
 
@@ -30,12 +30,21 @@ export class AddTubComponent {
     if (this.tubForm.valid) {
       const formData = new FormData();
       Object.keys(this.tubForm.value).forEach(key => {
-        formData.append(key, this.tubForm.value[key]);
+        const formControl = this.tubForm.get(key);
+        if (formControl) {
+          if (key === 'logo_img') {
+            formData.append(key, formControl.value);
+          } else {
+            formData.append(key, formControl.value);
+          }
+        }
       });
 
       this.tubService.addTub(formData).subscribe(response => {
         console.log('Tub added successfully', response);
         this.router.navigate(['/shop']);
+      }, error => {
+        console.error('Error adding tub', error);
       });
     }
   }
