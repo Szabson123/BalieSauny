@@ -20,6 +20,5 @@ urlpatterns = [
     path('tubs/<int:pk>/create_rating/', RatingViewSet.as_view({'post':'create_rating'}), name='create_rating'),
     path('tubs/<int:pk>/rating_list/', RatingViewSet.as_view({'get':'rating_list'}), name='rating_list'),
     
-    path('discounts/<int:pk>/use/', DiscountViewSet.as_view({'post': 'use_discount'}), name='use-discount'),
     path('add-tub/', AddTubView.as_view(), name='add-tub'),  
 ]
