@@ -5,10 +5,13 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from decimal import Decimal
+from rest_framework.permissions import AllowAny
+
 
 class TubViewListSet(viewsets.ModelViewSet):
     queryset = Tub.objects.all()
     serializer_class = TubSerializer
+    permission_classes = [AllowAny]
 
 
 class AddTubView(generics.CreateAPIView):

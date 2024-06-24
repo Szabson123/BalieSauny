@@ -2,7 +2,7 @@ from django.shortcuts import render
 from drf_spectacular.utils import extend_schema, extend_schema_view
 
 from .models import CustomUser
-from .serializers import UserRegistrationSerializer, CustomTokenObtainPairSerializer
+from .serializers import UserRegistrationSerializer, CustomTokenObtainPairSerializer, UserSerializer
 
 from rest_framework import viewsets, status, permissions
 from rest_framework.views import APIView
@@ -43,3 +43,9 @@ class LogoutView(APIView):
 
 class CustomTokenRefreshView(TokenRefreshView):
     pass
+
+
+@extend_schema_view(create=extend_schema(exclude=True))
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
