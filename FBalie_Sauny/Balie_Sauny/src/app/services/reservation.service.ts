@@ -25,4 +25,12 @@ export class ReservationService {
   acceptReservation(reservationId: number): Observable<any> {
     return this.http.patch(`${this.apiUrl}/reservations/${reservationId}/accept_reservation/`, {});
   }
+
+  deleteReservation(reservationId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/reservations/${reservationId}/delete_reservation/`, {});
+  }
+
+  getAllReservations(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/reservations/`);
+  }
 }

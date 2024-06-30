@@ -125,6 +125,12 @@ class ReservationViewSet(viewsets.ModelViewSet):
         reservations = Reservation.objects.filter(accepted_status=True)
         serializer = ReservationSerializer(reservations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['DELETE'])
+    def delete_reservation(self, request, pk=None):
+        reservation = get_object_or_404(Reservation, pk=pk)
+        reservation.delete()
+        return Response({'message': 'Reservation deleted'}, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'])
     def pending_reservations(self, request):

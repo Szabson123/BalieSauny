@@ -7,7 +7,6 @@ import { ReservationFormComponent } from './reservation-form/reservation-form.co
 import { AddTubComponent } from './add-tub/add-tub.component';
 import { ReservationsToAcceptComponent } from './reservations-to-accept/reservations-to-accept.component';
 
-
 export const routes: Routes = [
     { path: '', component: MainPageComponent},
     { path: 'shop', component: ShopComponent},

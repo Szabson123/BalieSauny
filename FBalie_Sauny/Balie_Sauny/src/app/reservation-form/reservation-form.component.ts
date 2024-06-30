@@ -41,10 +41,12 @@ export class ReservationFormComponent implements OnInit {
       this.tubId = +params.get('id')!;
       this.loadTubInfo();
     });
-
+  
     this.route.queryParamMap.subscribe(params => {
       this.startDate = params.get('start_date')!;
       this.endDate = params.get('end_date')!;
+      console.log('Start Date:', this.startDate);
+      console.log('End Date:', this.endDate);
       this.calculateTotalPrice();
     });
   }

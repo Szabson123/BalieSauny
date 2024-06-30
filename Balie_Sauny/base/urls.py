@@ -16,6 +16,7 @@ urlpatterns = [
     path('tubs/<int:pk>/check_reservations/', ReservationViewSet.as_view({'get': 'check_reservations'}), name='check_reservations'),
     path('reservations/', ReservationViewSet.as_view({'get': 'all_reservations'}), name='all_reservations'),
     path('reservations/<int:pk>/accept_reservation/', ReservationViewSet.as_view({'patch': 'accept_reservation'}), name='accept-reservation'),
+    path('reservations/<int:pk>/delete_reservation/', ReservationViewSet.as_view({'patch': 'delete_reservation'}), name='delete_reservation'),
     
     path('tubs/<int:pk>/create_rating/', RatingViewSet.as_view({'post':'create_rating'}), name='create_rating'),
     path('tubs/<int:pk>/rating_list/', RatingViewSet.as_view({'get':'rating_list'}), name='rating_list'),

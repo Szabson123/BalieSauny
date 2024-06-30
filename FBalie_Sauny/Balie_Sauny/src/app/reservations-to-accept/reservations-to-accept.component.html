@@ -5,17 +5,33 @@
 <br>
 <br>
 
-<div class="pending-reservations">
-    <h2>Pending Reservations</h2>
-    <ul>
-      <li *ngFor="let res of pendingReservations">
-        Tub: {{ res.tub.name }}, 
-        User: {{ res.user.username }}, 
-        Start Date: {{ res.start_date | date }}, 
-        End Date: {{ res.end_date | date }},
-        Price: {{ res.counted_price | currency }}
-        <button (click)="acceptReservation(res.id)">Accept</button>
-      </li>
-    </ul>
+<div class="pending-reservations-container">
+  <h2>Rezerwacje do zaakceptowania</h2>
+  <ul class="reservation-list">
+    <li *ngFor="let res of pendingReservations" class="reservation-item">
+      <div class="reservation-info">
+        <div class="reservation-detail">
+          <strong class="description2">Balia: {{ res.tub.name }}</strong> 
+        </div>
+        <div class="reservation-detail">
+          <strong class="description2">Użytkownik: <span class="description2-shop-sum"> {{ res.user.username }}</span></strong> 
+        </div>
+        <div class="reservation-detail">
+          <strong class="description2">Data początkowa: <span class="description2-shop-sum">{{ res.start_date | date }}</span></strong> 
+        </div>
+        <div class="reservation-detail">
+          <strong class="description2">Data końcowa: <span class="description2-shop-sum">{{ res.end_date | date }}</span> </strong> 
+        </div>
+        <div class="reservation-detail">
+          <strong class="description2">Cena: <span class="description2-shop-sum">{{ res.counted_price }} zł</span></strong> 
+        </div>
+      </div>
+      <div class="">
+        <button class="button-81-shop" (click)="acceptReservation(res.id)">Accept</button>
+        <button class="button-81-shop-red" (click)="deleteReservation(res.id)">Delete</button>
+      </div>
+    </li>
+  </ul>
 </div>
+
 

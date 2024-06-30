@@ -34,7 +34,6 @@ export class ProductDetailComponent implements OnInit {
   
   tubId!: number;
   reservation: any[] = [];
-  Date1: Date = new Date();
   tub: any = {};
   selectedDates: Date[] = [];
   currentStartDate!: Date;
@@ -88,12 +87,9 @@ export class ProductDetailComponent implements OnInit {
 
   updateCalendarReservationsIfNeeded() {
     if (this.reservationsLoaded && this.tubInfoLoaded) {
-      this.updateCalendarReservations(this.normalizeDate(new Date()), this.normalizeDate(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)));
-      setTimeout(() => {
-        if (this.calendarComponent) {
-          this.calendarComponent.getApi().refetchEvents();
-        }
-      }, 100);
+      const startDate = this.normalizeDate(new Date());
+      const endDate = this.normalizeDate(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0));
+      this.updateCalendarReservations(startDate, endDate);
     }
   }
 
@@ -138,48 +134,25 @@ export class ProductDetailComponent implements OnInit {
       });
     });
 
-    const allDaysInView = this.getAllDaysInView(startDate, endDate);
-
-    let freeDays = allDaysInView.filter(day => 
-      !reservationEvents.some(event => 
-        event.start <= day && event.end! > day
-      )
-    );
-
-    let freeEvents: CalendarEvent[] = freeDays.map(day => ({
-      title: '',
-      start: day,
-      allDay: true,
-      display: 'background',
-      backgroundColor: 'lightgreen',
-      classNames: ['fc-event-lightgreen']
-    }));
-
     let selectedEvents: CalendarEvent[] = this.selectedDates.map(date => ({
       title: 'Zaznaczone',
       start: date,
       allDay: true,
       display: 'background',
-      backgroundColor: 'yellow',
+      backgroundColor: 'green',
       classNames: ['fc-event-selected']
     }));
 
     this.calendarOptions = {
       ...this.calendarOptions,
-      events: [...reservationEvents, ...freeEvents, ...selectedEvents]
+      events: [...reservationEvents, ...selectedEvents]
     };
-  }
-
-  getAllDaysInView(startDate: Date, endDate: Date): Date[] {
-    let dates = [];
-    let currentDate = new Date(startDate);
-
-    while (currentDate <= endDate) {
-      dates.push(new Date(currentDate));
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-
-    return dates;
+    
+    setTimeout(() => {
+      if (this.calendarComponent) {
+        this.calendarComponent.getApi().refetchEvents();
+      }
+    }, 100);
   }
 
   normalizeDate(date: Date): Date {
@@ -207,12 +180,21 @@ export class ProductDetailComponent implements OnInit {
     this.totalPrice = diffDays * parseFloat(this.tub.price_per_day);
   }
 
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   goToReservationForm() {
+    console.log('Selected Start Date (before navigate):', this.selectedDates[0]);
+    console.log('Selected End Date (before navigate):', this.selectedDates[1]);
     this.router.navigate(['/shop', this.tubId, 'reservation'], {
-        queryParams: {
-            start_date: this.selectedDates[0].toISOString().split('T')[0],
-            end_date: this.selectedDates[1].toISOString().split('T')[0]
-        }
+      queryParams: {
+        start_date: this.formatDate(this.selectedDates[0]),
+        end_date: this.formatDate(this.selectedDates[1])
+      }
     });
   }
 

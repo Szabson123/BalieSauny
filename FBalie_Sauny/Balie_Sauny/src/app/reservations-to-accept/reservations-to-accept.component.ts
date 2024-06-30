@@ -42,4 +42,16 @@ export class ReservationsToAcceptComponent implements OnInit {
       }
     );
   }
+
+  deleteReservation(reservationId: number): void {
+    this.reservationService.deleteReservation(reservationId).subscribe(
+      response => {
+        console.log('Reservation deleted', response);
+        this.fetchPendingReservations(); 
+      },
+      error => {
+        console.error('Error deleting reservation', error);
+      }
+    );
+  }
 }
