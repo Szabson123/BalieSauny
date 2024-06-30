@@ -6,8 +6,9 @@
 <br>
 
 <div class="pending-reservations-container">
-  <h2>Rezerwacje do zaakceptowania</h2>
-  <a class="ctf-form" href="/all-reservations">Wszystkie rezerwacje</a>
+  <h2>Rezerwacje do zaakceptowania</h2><div class="center">
+    <p class="button-81" routerLink="/all-reservations">Wszystkie rezerwacje</p>
+  </div>
   <ul class="reservation-list">
     <li *ngFor="let res of pendingReservations" class="reservation-item">
       <div class="reservation-info">

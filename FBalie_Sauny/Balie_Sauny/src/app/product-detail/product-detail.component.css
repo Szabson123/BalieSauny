@@ -4,15 +4,15 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 20px;
+    padding: 15px;
 }
 
 .title-shop {
     font-family: 'Playfair Display', serif;
     font-weight: 600;
-    font-size: 50px;
+    font-size: 45px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .container {
@@ -35,7 +35,7 @@
 
 .calendar-container full-calendar {
     width: 100%; /* Dodajemy pełną szerokość */
-    height: 550px; /* Ustawiamy pożądaną wysokość */
+    height: 530px; /* Ustawiamy pożądaną wysokość */
 }
 .description2-shop{
     font-family: "Josefin Sans", sans-serif;
