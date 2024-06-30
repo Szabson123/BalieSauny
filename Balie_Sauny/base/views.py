@@ -18,11 +18,13 @@ class TubViewListSet(viewsets.ModelViewSet):
 class AddTubView(generics.CreateAPIView):
     queryset = Tub.objects.all()
     serializer_class = AddTubSerializer
+    permission_classes = [AllowAny]
 
 
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
+    permission_classes = [AllowAny]
 
     @action(detail=True, methods=['POST'])
     def create_reservation(self, request, pk=None):
@@ -135,6 +137,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
 class RatingViewSet(viewsets.ModelViewSet):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
+    permission_classes = [AllowAny]
     
     @action(detail=True, methods=['POST'])
     def create_rating(self, request, pk=None):
@@ -167,8 +170,10 @@ class RatingViewSet(viewsets.ModelViewSet):
 class DiscountViewSet(viewsets.ModelViewSet):
     queryset = Discount.objects.all()
     serializer_class = DiscountSerializer
+    permission_classes = [AllowAny]
 
 
 class FaqViewSer(viewsets.ModelViewSet):
     queryset = Faq
     serializer_class = FaqSerializer
+    permission_classes = [AllowAny]

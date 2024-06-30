@@ -8,7 +8,8 @@ import { TubService } from '../services/tub.service';
 import { FullCalendarModule, FullCalendarComponent } from '@fullcalendar/angular'; 
 import { CalendarOptions } from '@fullcalendar/core'; 
 import dayGridPlugin from '@fullcalendar/daygrid'; 
-import interactionPlugin from '@fullcalendar/interaction'; 
+import interactionPlugin from '@fullcalendar/interaction';
+import plLocale from '@fullcalendar/core/locales/pl'; 
 
 interface CalendarEvent {
   title: string;
@@ -40,12 +41,18 @@ export class ProductDetailComponent implements OnInit {
   currentEndDate!: Date;
   reservationsLoaded: boolean = false;
   tubInfoLoaded: boolean = false;
+  totalPrice: number = 0;
+
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     plugins: [dayGridPlugin, interactionPlugin],
     dateClick: this.handleDateClick.bind(this),
     events: [],
-    datesSet: this.handleDatesSet.bind(this)
+    datesSet: this.handleDatesSet.bind(this),
+    locales: [plLocale], // Dodajemy polską lokalizację
+    locale: 'pl', // Ustawiamy język na polski
+    headerToolbar: {
+    }
   };
 
   constructor(
@@ -102,6 +109,7 @@ export class ProductDetailComponent implements OnInit {
   
     if (this.selectedDates.length === 2) {
       this.printDateInfo();
+      this.calculateTotalPrice();
     }
   }
 
@@ -117,7 +125,7 @@ export class ProductDetailComponent implements OnInit {
     this.reservation.forEach(res => {
       const start = this.normalizeDate(new Date(res.start_date));
       const end = this.normalizeDate(new Date(res.end_date));
-      end.setDate(end.getDate() + 1); // Add one day to include the end date
+      end.setDate(end.getDate() + 1);
 
       reservationEvents.push({
         title: '',
@@ -148,7 +156,7 @@ export class ProductDetailComponent implements OnInit {
     }));
 
     let selectedEvents: CalendarEvent[] = this.selectedDates.map(date => ({
-      title: 'Selected',
+      title: 'Zaznaczone',
       start: date,
       allDay: true,
       display: 'background',
@@ -189,6 +197,14 @@ export class ProductDetailComponent implements OnInit {
     console.log('Start Date:', startDate);
     console.log('End Date:', endDate);
     console.log('Number of Days:', diffDays);
+  }
+
+  calculateTotalPrice() {
+    const startDate = this.selectedDates[0];
+    const endDate = this.selectedDates[1];
+    const timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
+    const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
+    this.totalPrice = diffDays * parseFloat(this.tub.price_per_day);
   }
 
   goToReservationForm() {
