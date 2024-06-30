@@ -166,17 +166,3 @@
     text-align: center;
     color: #474a51;
 }
-.ctf-form{
-    padding: 10px 20px;
-    font-size: 16px;
-    color: white;
-    background-color: #43b852;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    align-self: flex-start;
-  }
-  
-  .ctf-form button:hover {
-    background-color: #5aeb6d;
-}

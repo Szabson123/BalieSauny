@@ -4,26 +4,26 @@ import { ReservationService } from '../services/reservation.service';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
-  selector: 'app-reservations-to-accept',
+  selector: 'app-admin-all-reservations',
   standalone: true,
   imports: [CommonModule, HttpClientModule],
-  templateUrl: './allreservations.component.html',
-  styleUrls: ['./allreservations.component.css'],
+  templateUrl: './admin-all-reservations.component.html',
+  styleUrl: './admin-all-reservations.component.css',
   providers: [ReservationService]
 })
-export class ReservationsToAcceptComponent implements OnInit {
-  pendingReservations: any[] = [];
+export class AdminAllReservationsComponent implements OnInit{
+  allReservations: any[] = [];
 
   constructor(private reservationService: ReservationService) { }
 
   ngOnInit(): void {
-    this.fetchPendingReservations();
+    this.fetchallReservations();
   }
 
-  fetchPendingReservations(): void {
-    this.reservationService.getPendingReservations().subscribe(
+  fetchallReservations(): void {
+    this.reservationService.getAllReservations().subscribe(
       data => {
-        this.pendingReservations = data;
+        this.allReservations = data;
       },
       error => {
         console.error('Error fetching all reservations', error);
@@ -31,3 +31,4 @@ export class ReservationsToAcceptComponent implements OnInit {
     );
   }
 }
+

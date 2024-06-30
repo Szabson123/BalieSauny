@@ -1,4 +1,3 @@
-
 <br>
 <br>
 <br>
@@ -6,10 +5,9 @@
 <br>
 
 <div class="pending-reservations-container">
-  <h2>Rezerwacje do zaakceptowania</h2>
-  <a class="ctf-form" href="/all-reservations">Wszystkie rezerwacje</a>
+  <h2>Wszystkie Rezerwacje</h2>
   <ul class="reservation-list">
-    <li *ngFor="let res of pendingReservations" class="reservation-item">
+    <li *ngFor="let res of allReservations" class="reservation-item">
       <div class="reservation-info">
         <div class="reservation-detail">
           <strong class="description2">Balia: {{ res.tub.name }}</strong> 
@@ -26,13 +24,10 @@
         <div class="reservation-detail">
           <strong class="description2">Cena: <span class="description2-shop-sum">{{ res.counted_price }} zł</span></strong> 
         </div>
-      </div>
-      <div class="">
-        <button class="button-81-shop" (click)="acceptReservation(res.id)">Accept</button>
-        <button class="button-81-shop-red" (click)="deleteReservation(res.id)">Delete</button>
+        <div class="reservation-detail">
+          <strong class="description2">Status: <span class="description2-shop-sum">#</span></strong> 
+        </div>
       </div>
     </li>
   </ul>
 </div>
-
-
