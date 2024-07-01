@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from decimal import Decimal
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 
 
@@ -18,13 +18,13 @@ class TubViewListSet(viewsets.ModelViewSet):
 class AddTubView(generics.CreateAPIView):
     queryset = Tub.objects.all()
     serializer_class = AddTubSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     @action(detail=True, methods=['POST'])
     def create_reservation(self, request, pk=None):

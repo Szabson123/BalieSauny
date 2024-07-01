@@ -11,7 +11,14 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, FormsModule]
 })
 export class RegisterComponent {
-  userData: any = {};
+  userData: any = {
+    username: '',
+    password: '',
+    phone_number: '',
+    first_name: '',
+    last_name: '',
+    email: '',
+  };
   errorMessage: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
