@@ -11,4 +11,8 @@ import { RouterModule } from '@angular/router';
 })
 export class AppComponent {
   title = 'Balie_Sauny';
+
+  scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }
