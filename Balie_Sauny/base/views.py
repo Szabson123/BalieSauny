@@ -1,12 +1,32 @@
 from rest_framework import viewsets, status, generics, permissions
 from .models import Tub, Reservation, Rating, Discount, Faq
-from .serializers import TubSerializer, ReservationSerializer, RatingSerializer, DiscountSerializer, FaqSerializer, AddTubSerializer, Address
+from .serializers import TubSerializer, ReservationSerializer, RatingSerializer, DiscountSerializer, FaqSerializer, AddTubSerializer, Address, FaqQuestionSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from decimal import Decimal
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.views import APIView
+from custom_auth.serializers import UserSerializer
+
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+
+class UserReservationHistoryView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        reservations = user.user_reservations.all()
+        serializer = ReservationSerializer(reservations, many=True)
+        return Response(serializer.data)
 
 
 class TubViewListSet(viewsets.ModelViewSet):
@@ -137,9 +157,8 @@ class ReservationViewSet(viewsets.ModelViewSet):
         reservations = Reservation.objects.filter(accepted_status=False)
         serializer = ReservationSerializer(reservations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-
+    
+        
 class RatingViewSet(viewsets.ModelViewSet):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
@@ -179,7 +198,25 @@ class DiscountViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
 
 
-class FaqViewSer(viewsets.ModelViewSet):
-    queryset = Faq
+class UserFaqQuestionView(generics.CreateAPIView):
+    serializer_class = FaqQuestionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class ManagerFaqListView(generics.ListAPIView):
     serializer_class = FaqSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+
+    def get_queryset(self):
+        return Faq.objects.all()
+
+
+class PublishedFaqListView(generics.ListAPIView):
+    serializer_class = FaqSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        return Faq.objects.filter(is_published=True)

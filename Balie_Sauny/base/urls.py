@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import TubViewListSet, ReservationViewSet, RatingViewSet, DiscountViewSet, AddTubView
+from .views import TubViewListSet, ReservationViewSet, RatingViewSet, DiscountViewSet, AddTubView, UserProfileView, UserReservationHistoryView, UserFaqQuestionView,     ManagerFaqListView, PublishedFaqListView
 
 router = routers.DefaultRouter()
 router.register('tubs', TubViewListSet)
@@ -19,5 +19,12 @@ urlpatterns = [
     path('tubs/<int:pk>/create_rating/', RatingViewSet.as_view({'post':'create_rating'}), name='create_rating'),
     path('tubs/<int:pk>/rating_list/', RatingViewSet.as_view({'get':'rating_list'}), name='rating_list'),
     
-    path('add-tub/', AddTubView.as_view(), name='add-tub'),  
+    path('add-tub/', AddTubView.as_view(), name='add-tub'),
+    
+    path('profile/', UserProfileView.as_view(), name='user-profile'),
+    path('profile/reservations/', UserReservationHistoryView.as_view(), name='user-reservation-history'),
+    
+    path('faq/question/', UserFaqQuestionView.as_view(), name='user-faq-question'),
+    path('faq/manage/', ManagerFaqListView.as_view(), name='manager-faq-list'),
+    path('faq/', PublishedFaqListView.as_view(), name='published-faq-list'),  
 ]

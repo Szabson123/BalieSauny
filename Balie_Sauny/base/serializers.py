@@ -38,10 +38,15 @@ class DiscountSerializer(serializers.ModelSerializer):
         fields = ['tub', 'main', 'active', 'used', 'is_multi_use', 'value']
         
 
+class FaqQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Faq
+        fields = ['id', 'question']
+
 class FaqSerializer(serializers.ModelSerializer):
     class Meta:
         model = Faq
-        fields = ['id', 'question', 'answer']
+        fields = ['id', 'question', 'answer', 'is_published']
         
 
 class AddressSerializer(serializers.ModelSerializer):

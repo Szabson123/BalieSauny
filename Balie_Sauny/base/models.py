@@ -66,3 +66,9 @@ class Discount(models.Model):
 class Faq(models.Model):
     question = models.CharField(max_length=255, null=True, blank=True)
     answer = models.CharField(max_length=511, null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True, null=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='faqs', null=True, blank=True)
+    is_published = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.question if self.question else "FAQ without question"
