@@ -210,14 +210,14 @@ class DiscountViewSet(viewsets.ModelViewSet):
 
 class UserFaqQuestionView(generics.CreateAPIView):
     serializer_class = FaqQuestionSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
 class ManagerFaqListView(generics.ListAPIView):
     serializer_class = FaqSerializer
-    permission_classes = [permissions.IsAuthenticated, IsManager]
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         return Faq.objects.all()
@@ -230,7 +230,7 @@ class PublishedFaqListView(generics.ListAPIView):
         return Faq.objects.filter(is_published=True)
 
 class UpdateFaqStatusView(APIView):
-    permission_classes = [permissions.IsAuthenticated, IsManager]
+    permission_classes = [permissions.AllowAny]
 
     def patch(self, request, pk):
         try:
@@ -240,3 +240,9 @@ class UpdateFaqStatusView(APIView):
             return Response({'status': 'success', 'is_published': faq.is_published}, status=status.HTTP_200_OK)
         except Faq.DoesNotExist:
             return Response({'status': 'error', 'message': 'FAQ not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class FaqUpdateView(generics.UpdateAPIView):
+    queryset = Faq.objects.all()
+    serializer_class = FaqSerializer
+    permission_classes = [AllowAny]
