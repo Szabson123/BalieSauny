@@ -11,6 +11,16 @@ from rest_framework.views import APIView
 from custom_auth.serializers import UserSerializer
 
 
+class IsManager(permissions.BasePermission):
+    """
+    Custom permission to only allow managers to access certain views.
+    """
+
+    def has_permission(self, request, view):
+        # Check if the user is authenticated and is a manager
+        return request.user and request.user.is_authenticated and request.user.is_manager
+
+
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -205,14 +215,12 @@ class UserFaqQuestionView(generics.CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-
 class ManagerFaqListView(generics.ListAPIView):
     serializer_class = FaqSerializer
-    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated, IsManager]
 
     def get_queryset(self):
         return Faq.objects.all()
-
 
 class PublishedFaqListView(generics.ListAPIView):
     serializer_class = FaqSerializer
@@ -220,10 +228,9 @@ class PublishedFaqListView(generics.ListAPIView):
 
     def get_queryset(self):
         return Faq.objects.filter(is_published=True)
-    
 
 class UpdateFaqStatusView(APIView):
-    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated, IsManager]
 
     def patch(self, request, pk):
         try:
