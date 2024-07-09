@@ -220,3 +220,16 @@ class PublishedFaqListView(generics.ListAPIView):
 
     def get_queryset(self):
         return Faq.objects.filter(is_published=True)
+    
+
+class UpdateFaqStatusView(APIView):
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+
+    def patch(self, request, pk):
+        try:
+            faq = Faq.objects.get(pk=pk)
+            faq.is_published = not faq.is_published
+            faq.save()
+            return Response({'status': 'success', 'is_published': faq.is_published}, status=status.HTTP_200_OK)
+        except Faq.DoesNotExist:
+            return Response({'status': 'error', 'message': 'FAQ not found'}, status=status.HTTP_404_NOT_FOUND)
