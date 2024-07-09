@@ -217,7 +217,7 @@ class UserFaqQuestionView(generics.CreateAPIView):
 
 class ManagerFaqListView(generics.ListAPIView):
     serializer_class = FaqSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         return Faq.objects.all()

@@ -12,7 +12,10 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+     private router: Router
+  ) {
     this.currentUserSubject = new BehaviorSubject<any>(localStorage.getItem('access_token'));
     this.currentUser = this.currentUserSubject.asObservable();
   }
