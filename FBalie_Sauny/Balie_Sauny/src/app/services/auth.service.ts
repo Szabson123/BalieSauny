@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -11,6 +11,7 @@ export class AuthService {
   private baseUrl = 'http://localhost:8000';
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
+  
 
   constructor(
     private http: HttpClient,

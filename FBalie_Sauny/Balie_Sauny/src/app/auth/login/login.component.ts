@@ -4,11 +4,11 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule],
   providers: [AuthService]
@@ -24,6 +24,9 @@ export class LoginComponent {
     this.authService.login(this.username, this.password).subscribe(
       () => {
         this.router.navigate(['/']);
+        setTimeout(() => {
+          window.location.reload(); // Force reload to update the login status
+        }, 100);
       },
       (error) => {
         this.errorMessage = 'Invalid username or password';

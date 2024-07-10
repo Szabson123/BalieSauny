@@ -1,49 +1,97 @@
-.logo{
+.logo {
     height: 100px;
     width: 140px;
 }
-body{
+body {
     margin: 0;
     background-color: #e8ece8;
 }
-header{
+header {
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: white;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
 }
-html{
+html {
     margin: 0;
 }
-nav{
-  padding-top: 5em;
-  width: 100%;
-  background-color: white;
-  position: fixed;
+nav {
+    width: 100%;
+    background-color: white;
 }
-.navbar{
+.navbar {
     display: flex;
     list-style: none;
     justify-content: space-between;
-    margin-left: 10em;
     align-items: center;
-    justify-content: center;
+    padding: 1em 10em;
+    margin: 0;
 }
-.navbar li{
-    display: inline-block;
-    margin-right: 3.5rem;
+.navbar li {
+    margin: 0 1em;
 }
-.navbar li a{
+.navbar li a {
     font-family: "Dosis", sans-serif;
     font-weight: 400;
     font-size: larger;
-    font-style: normal;
-    padding-right: 20px;
-    padding-left: 20px;
     text-decoration: none;
     color: black;
 }
-.conteiner{
-    margin-left: 10%;
-    margin-right: 10%;
+.container {
+    margin: 0 10%;
+}
+
+/* Media Queries */
+@media (max-width: 1200px) {
+    .navbar {
+        padding: 1em 5em;
+    }
+}
+
+@media (max-width: 992px) {
+    .navbar {
+        padding: 1em 2em;
+    }
+    .navbar li a {
+        font-size: medium;
+    }
+    .logo {
+        height: 80px;
+        width: 120px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1em 1em;
+    }
+    .navbar li {
+        margin: 0.5em 0;
+    }
+    .navbar li a {
+        font-size: medium;
+    }
+    .logo {
+        height: 60px;
+        width: 100px;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar {
+        padding: 1em 0.5em;
+    }
+    .navbar li a {
+        font-size: small;
+    }
+    .logo {
+        height: 50px;
+        width: 80px;
+    }
 }
