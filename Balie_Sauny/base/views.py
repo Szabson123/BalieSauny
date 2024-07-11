@@ -12,8 +12,6 @@ from custom_auth.serializers import UserSerializer
 from custom_auth.models import CustomUser
 from django.contrib.auth import get_user_model
 
-CustomUser = get_user_model
-
 
 class IsManager(permissions.BasePermission):
     """
@@ -44,7 +42,7 @@ class UserReservationHistoryView(APIView):
 
 
 class SpecificUserProfileView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request, user_id, *args, **kwargs):
         user = CustomUser.objects.get(pk=user_id)

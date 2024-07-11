@@ -10,10 +10,19 @@
     <li *ngFor="let res of allReservations" class="reservation-item">
       <div class="reservation-info">
         <div class="reservation-detail">
-          <strong class="description2">Balia: {{ res.tub.name }}</strong> 
+          <strong class="description2">Balia: {{ res.tubName }}</strong> 
         </div>
         <div class="reservation-detail">
-          <strong class="description2">Użytkownik: <span class="description2-shop-sum"> {{ res.user.username }}</span></strong> 
+          <strong class="description2">Email: <span class="description2-shop-sum">{{ getUserProfile(res.user)?.email }}</span></strong> 
+        </div>
+        <div class="reservation-detail">
+          <strong class="description2">Imię: <span class="description2-shop-sum">{{ getUserProfile(res.user)?.first_name }}</span></strong> 
+        </div>
+        <div class="reservation-detail">
+          <strong class="description2">Nazwisko: <span class="description2-shop-sum">{{ getUserProfile(res.user)?.last_name }}</span></strong> 
+        </div>
+        <div class="reservation-detail">
+          <strong class="description2">Telefon: <span class="description2-shop-sum">{{ getUserProfile(res.user)?.phone_number }}</span></strong> 
         </div>
         <div class="reservation-detail">
           <strong class="description2">Data początkowa: <span class="description2-shop-sum">{{ res.start_date | date }}</span></strong> 
@@ -25,7 +34,7 @@
           <strong class="description2">Cena: <span class="description2-shop-sum">{{ res.counted_price }} zł</span></strong> 
         </div>
         <div class="reservation-detail">
-          <strong class="description2">Status: <span class="description2-shop-sum">#</span></strong> 
+          <strong class="description2">Status: <span class="description2-shop-sum">{{ res.status }}</span></strong> 
         </div>
       </div>
     </li>

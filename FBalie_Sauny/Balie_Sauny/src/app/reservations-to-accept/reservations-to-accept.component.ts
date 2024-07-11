@@ -5,6 +5,7 @@ import { TubService } from '../services/tub.service';
 import { ProfileService } from '../services/profile.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-reservations-to-accept',
@@ -45,36 +46,48 @@ export class ReservationsToAcceptComponent implements OnInit {
   fetchPendingReservations(): void {
     this.reservationService.getPendingReservations().subscribe(
       data => {
-        this.pendingReservations = data.map((reservation: any) => {
-          if (reservation.user && reservation.user.id) {
-            this.loadUserProfile(reservation.user.id);
-          }
-          return {
-            ...reservation,
-            tubName: this.getTubName(reservation.tub),
-          };
+        data.forEach((reservation: any) => {
+          console.log('Reservation:', reservation);  // Logowanie obiektu reservation
         });
-        console.log('Pending reservations:', this.pendingReservations);
+  
+        const userIds: number[] = data
+          .map((reservation: any) => reservation.user)
+          .filter((userId: number) => userId !== undefined);  // Filtrujemy undefined
+  
+        const uniqueUserIds: number[] = [...new Set(userIds)];
+  
+        if (uniqueUserIds.length > 0) {
+          const profileRequests = uniqueUserIds.map((id: number) => this.profileService.getSpecificUserProfile(id));
+  
+          forkJoin(profileRequests).subscribe(
+            profiles => {
+              profiles.forEach(profile => {
+                this.userProfiles[profile.id] = profile;
+              });
+  
+              this.pendingReservations = data.map((reservation: any) => {
+                return {
+                  ...reservation,
+                  tubName: this.getTubName(reservation.tub),
+                };
+              });
+              console.log('Pending reservations:', this.pendingReservations);
+            },
+            error => {
+              console.error('Error loading user profiles', error);
+            }
+          );
+        } else {
+          console.error('No valid user IDs found in reservations');
+        }
       },
       error => {
         console.error('Error fetching pending reservations', error);
       }
     );
   }
-
-  loadUserProfile(userId: number): void {
-    if (!this.userProfiles[userId]) {
-      this.profileService.getSpecificUserProfile(userId).subscribe(
-        data => {
-          this.userProfiles[userId] = data;
-          console.log(`Loaded profile for user ID ${userId}:`, data);
-        },
-        error => {
-          console.error(`Error loading user profile for user ID ${userId}`, error);
-        }
-      );
-    }
-  }
+  
+  
 
   getTubName(tubId: number): string {
     const tub = this.tubs.find(t => t.id === tubId);

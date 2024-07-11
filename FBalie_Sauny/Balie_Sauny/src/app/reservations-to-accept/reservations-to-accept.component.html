@@ -16,16 +16,16 @@
           <strong class="description2">Balia: {{ res.tubName }}</strong> 
         </div>
         <div class="reservation-detail">
-          <strong class="description2">Email: <span class="description2-shop-sum">{{ getUserProfile(res.user.id)?.email }}</span></strong> 
+          <strong class="description2">Email: <span class="description2-shop-sum">{{ getUserProfile(res.user)?.email }}</span></strong> 
         </div>
         <div class="reservation-detail">
-          <strong class="description2">Imię: <span class="description2-shop-sum">{{ getUserProfile(res.user.id)?.first_name }}</span></strong> 
+          <strong class="description2">Imię: <span class="description2-shop-sum">{{ getUserProfile(res.user)?.first_name }}</span></strong> 
         </div>
         <div class="reservation-detail">
-          <strong class="description2">Nazwisko: <span class="description2-shop-sum">{{ getUserProfile(res.user.id)?.last_name }}</span></strong> 
+          <strong class="description2">Nazwisko: <span class="description2-shop-sum">{{ getUserProfile(res.user)?.last_name }}</span></strong> 
         </div>
         <div class="reservation-detail">
-          <strong class="description2">Telefon: <span class="description2-shop-sum">{{ getUserProfile(res.user.id)?.phone_number }}</span></strong> 
+          <strong class="description2">Telefon: <span class="description2-shop-sum">{{ getUserProfile(res.user)?.phone_number }}</span></strong> 
         </div>
         <div class="reservation-detail">
           <strong class="description2">Data początkowa: <span class="description2-shop-sum">{{ res.start_date | date }}</span></strong> 
@@ -47,3 +47,4 @@
     </li>
   </ul>
 </div>
+
