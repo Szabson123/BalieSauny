@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import TubViewListSet, ReservationViewSet, RatingViewSet, DiscountViewSet, AddTubView, UserProfileView, UserReservationHistoryView, UserFaqQuestionView, UpdateFaqStatusView, ManagerFaqListView, PublishedFaqListView, FaqUpdateView
+from .views import TubViewListSet, ReservationViewSet, RatingViewSet, DiscountViewSet, AddTubView, UserProfileView, UserReservationHistoryView, UserFaqQuestionView, UpdateFaqStatusView, ManagerFaqListView, PublishedFaqListView, FaqUpdateView, SpecificUserProfileView
 
 router = routers.DefaultRouter()
 router.register('tubs', TubViewListSet)
@@ -23,7 +23,8 @@ urlpatterns = [
     
     path('profile/', UserProfileView.as_view(), name='user-profile'),
     path('profile/reservations/', UserReservationHistoryView.as_view(), name='user-reservation-history'),
-    
+    path('profile/<int:user_id>/', SpecificUserProfileView.as_view(), name='specific-user-profile'),
+
     path('faq/question/', UserFaqQuestionView.as_view(), name='user-faq-question'),
     path('faq/manage/', ManagerFaqListView.as_view(), name='manager-faq-list'),
     path('faq/', PublishedFaqListView.as_view(), name='published-faq-list'),

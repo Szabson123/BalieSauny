@@ -1,4 +1,3 @@
-
 <br>
 <br>
 <br>
@@ -6,17 +5,27 @@
 <br>
 
 <div class="pending-reservations-container">
-  <h2>Rezerwacje do zaakceptowania</h2><div class="center">
+  <h2>Rezerwacje do zaakceptowania</h2>
+  <div class="center">
     <p class="button-81" routerLink="/all-reservations">Wszystkie rezerwacje</p>
   </div>
   <ul class="reservation-list">
     <li *ngFor="let res of pendingReservations" class="reservation-item">
       <div class="reservation-info">
         <div class="reservation-detail">
-          <strong class="description2">Balia: {{ res.tub.name }}</strong> 
+          <strong class="description2">Balia: {{ res.tubName }}</strong> 
         </div>
         <div class="reservation-detail">
-          <strong class="description2">Użytkownik: <span class="description2-shop-sum"> {{ res.user.username }}</span></strong> 
+          <strong class="description2">Email: <span class="description2-shop-sum">{{ getUserProfile(res.user.id)?.email }}</span></strong> 
+        </div>
+        <div class="reservation-detail">
+          <strong class="description2">Imię: <span class="description2-shop-sum">{{ getUserProfile(res.user.id)?.first_name }}</span></strong> 
+        </div>
+        <div class="reservation-detail">
+          <strong class="description2">Nazwisko: <span class="description2-shop-sum">{{ getUserProfile(res.user.id)?.last_name }}</span></strong> 
+        </div>
+        <div class="reservation-detail">
+          <strong class="description2">Telefon: <span class="description2-shop-sum">{{ getUserProfile(res.user.id)?.phone_number }}</span></strong> 
         </div>
         <div class="reservation-detail">
           <strong class="description2">Data początkowa: <span class="description2-shop-sum">{{ res.start_date | date }}</span></strong> 
@@ -27,6 +36,9 @@
         <div class="reservation-detail">
           <strong class="description2">Cena: <span class="description2-shop-sum">{{ res.counted_price }} zł</span></strong> 
         </div>
+        <div class="reservation-detail">
+          <strong class="description2">Status: <span class="description2-shop-sum">{{ getStatus(res) }}</span></strong>
+        </div>
       </div>
       <div class="">
         <button class="button-81-shop" (click)="acceptReservation(res.id)">Accept</button>
@@ -35,5 +47,3 @@
     </li>
   </ul>
 </div>
-
-

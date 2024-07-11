@@ -9,6 +9,10 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.views import APIView
 from custom_auth.serializers import UserSerializer
+from custom_auth.models import CustomUser
+from django.contrib.auth import get_user_model
+
+CustomUser = get_user_model
 
 
 class IsManager(permissions.BasePermission):
@@ -36,6 +40,15 @@ class UserReservationHistoryView(APIView):
         user = request.user
         reservations = user.user_reservations.all()
         serializer = ReservationSerializer(reservations, many=True)
+        return Response(serializer.data)
+
+
+class SpecificUserProfileView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, user_id, *args, **kwargs):
+        user = CustomUser.objects.get(pk=user_id)
+        serializer = UserSerializer(user)
         return Response(serializer.data)
 
 

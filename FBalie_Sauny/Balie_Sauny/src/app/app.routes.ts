@@ -12,6 +12,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { LogoutComponent } from './auth/logout/logout.component';
 import { FaqAdminComponent } from './faq-admin/faq-admin.component';
 import { FaqListComponent } from './faq-list/faq-list.component';
+import { ProfileComponent } from './profile/profile.component';
 
 export const routes: Routes = [
   { path: '', component: MainPageComponent },
@@ -26,5 +27,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'logout', component: LogoutComponent },
   { path: 'faq', component: FaqListComponent },
-  { path: 'faq/manage', component: FaqAdminComponent }
+  { path: 'faq/manage', component: FaqAdminComponent },
+  { path: 'profile', component: ProfileComponent}
+
 ];

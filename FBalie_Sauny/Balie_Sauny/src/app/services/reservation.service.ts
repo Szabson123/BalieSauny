@@ -33,4 +33,7 @@ export class ReservationService {
   getAllReservations(): Observable<any> {
     return this.http.get(`${this.apiUrl}/reservations/`);
   }
+  getUserReservations(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/profile/reservations/`);
+  }
 }

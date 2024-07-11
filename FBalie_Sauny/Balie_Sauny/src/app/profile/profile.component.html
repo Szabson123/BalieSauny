@@ -1,1 +1,48 @@
-<p>profile works!</p>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div class="profile-container">
+    <h1>Profile</h1>
+  
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+  
+    <form (ngSubmit)="updateUserProfile()">
+      <label for="username">Username</label>
+      <input id="username" [(ngModel)]="userProfile.username" name="username" required />
+  
+      <label for="email">Email</label>
+      <input id="email" [(ngModel)]="userProfile.email" name="email" required type="email" />
+  
+      <label for="first_name">First Name</label>
+      <input id="first_name" [(ngModel)]="userProfile.first_name" name="first_name" required />
+  
+      <label for="last_name">Last Name</label>
+      <input id="last_name" [(ngModel)]="userProfile.last_name" name="last_name" required />
+  
+      <label for="phone_number">Phone Number</label>
+      <input id="phone_number" [(ngModel)]="userProfile.phone_number" name="phone_number" required />
+  
+      <button type="submit">Update Profile</button>
+    </form>
+  
+    <h2>Reservation History</h2>
+    <ul>
+      <li *ngFor="let reservation of userReservations">
+        <p>Tub: {{ reservation.tub_name }}</p> <!-- Display tub name -->
+        <p>Price per day: {{ reservation.price }}</p>
+        <p>Start Date: {{ reservation.start_date }}</p>
+        <p>End Date: {{ reservation.end_date }}</p>
+        <p>Total Price: {{ reservation.total_price }}</p>
+        <p>Status: 
+          <span *ngIf="reservation.wait_status">Waiting</span>
+          <span *ngIf="reservation.accepted_status">Accepted</span>
+        </p>
+      </li>
+    </ul>
+  </div>
+  
+  

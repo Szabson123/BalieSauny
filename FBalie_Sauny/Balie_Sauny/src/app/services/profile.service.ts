@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ProfileService {
-  private apiUrl = 'http://127.0.0.1:8000/api/';  
+  private apiUrl = 'http://127.0.0.1:8000/api';  // Adjust as necessary
 
   constructor(private http: HttpClient) { }
 
@@ -20,5 +20,9 @@ export class ProfileService {
 
   getUserReservations(): Observable<any> {
     return this.http.get(`${this.apiUrl}/profile/reservations/`);
+  }
+
+  getSpecificUserProfile(userId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/profile/${userId}/`);
   }
 }
