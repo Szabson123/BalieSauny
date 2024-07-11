@@ -20,18 +20,12 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.authService.currentUser.subscribe(token => {
-      this.isLoggedIn = !!token;
-      this.cdr.detectChanges(); // Trigger change detection
-    });
-
-    this.authService.isManager.subscribe(isManager => {
-      this.isAdmin = isManager;
-      this.cdr.detectChanges(); // Trigger change detection
-    });
-
-    if (this.isLoggedIn) {
-      this.authService.getProfile().subscribe(); // Pobierz profil, jeśli użytkownik jest zalogowany
+    if (this.authService.currentUserValue) {
+      this.authService.loadProfile().subscribe(() => {
+        this.isLoggedIn = !!this.authService.currentUserValue;
+        this.isAdmin = this.authService.isManagerValue;
+        this.cdr.detectChanges(); // Trigger change detection
+      });
     }
   }
 

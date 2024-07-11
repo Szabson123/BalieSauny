@@ -38,7 +38,7 @@ export class AuthService {
         localStorage.setItem('access_token', response.access);
         localStorage.setItem('refresh_token', response.refresh);
         this.currentUserSubject.next(response.access);
-        this.getProfile().subscribe(); // Pobieramy profil po zalogowaniu
+        this.loadProfile().subscribe(); // Pobieramy profil po zalogowaniu
       })
     );
   }
@@ -71,6 +71,15 @@ export class AuthService {
     return this.http.get<any>(`${this.baseUrl}/api/profile/`).pipe(
       tap(profile => {
         console.log('getProfile: profile:', profile); // Dodajemy logowanie
+        this.isManagerSubject.next(profile.is_manager);
+      })
+    );
+  }
+
+  loadProfile(): Observable<any> {
+    return this.getProfile().pipe(
+      tap(profile => {
+        console.log('loadProfile: profile:', profile); // Dodajemy logowanie
         this.isManagerSubject.next(profile.is_manager);
       })
     );
