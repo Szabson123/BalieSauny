@@ -84,21 +84,39 @@
           <div class="ctf-text">
             <p class="form-title">Zapraszamy do Kontaktu</p>
             <p class="description2">Czujcie się swobodnie, aby się z nami skontaktować! Jeśli macie jakiekolwiek pytania lub sugestie, prosimy o skorzystanie z formularza kontaktowego na naszej stronie internetowej. Jesteśmy chętni, aby odpowiedzieć na wszystkie Wasze zapytania i omówić potencjalne współprace. Z niecierpliwością czekamy na Waszą wiadomość!</p>
-            <form class="ctf-form">
+            <form [formGroup]="questionForm" (ngSubmit)="onSubmit()" class="ctf-form">
               <div>
                 <label for="full-name">Imię i Nazwisko</label>
-                <input id="full-name" type="text" placeholder="Piotr Kowalski" name="full-name" required>
+                <input id="full-name" type="text" placeholder="Piotr Kowalski" formControlName="fullName" required>
+                <div *ngIf="questionForm.get('fullName')?.invalid && (questionForm.get('fullName')?.dirty || questionForm.get('fullName')?.touched)">
+                  <small *ngIf="questionForm.get('fullName')?.errors?.['required']">Imię i Nazwisko jest wymagane.</small>
+                </div>
               </div>
               <div>
                 <label for="email">Email</label>
-                <input id="email" type="email" placeholder="me@example.com" name="email" required>
+                <input id="email" type="email" placeholder="me@example.com" formControlName="email" required>
+                <div *ngIf="questionForm.get('email')?.invalid && (questionForm.get('email')?.dirty || questionForm.get('email')?.touched)">
+                  <small *ngIf="questionForm.get('email')?.errors?.['required']">Email jest wymagany.</small>
+                  <small *ngIf="questionForm.get('email')?.errors?.['email']">Nieprawidłowy format email.</small>
+                </div>
               </div>
               <div>
                 <label for="phone-number">Numer Telefonu</label>
-                <input id="phone-number" type="text" placeholder="999999999" name="phone-number" required>
+                <input id="phone-number" type="text" placeholder="999999999" formControlName="phoneNumber" required>
+                <div *ngIf="questionForm.get('phoneNumber')?.invalid && (questionForm.get('phoneNumber')?.dirty || questionForm.get('phoneNumber')?.touched)">
+                  <small *ngIf="questionForm.get('phoneNumber')?.errors?.['required']">Numer Telefonu jest wymagany.</small>
+                  <small *ngIf="questionForm.get('phoneNumber')?.errors?.['pattern']">Numer Telefonu musi składać się z 9 cyfr.</small>
+                </div>
               </div>
               <div>
-                <button type="submit">Wyślij</button>
+                <label for="desc">Opis</label>
+                <input id="desc" type="text" placeholder="tutaj pisz" formControlName="desc" required>
+                <div *ngIf="questionForm.get('desc')?.invalid && (questionForm.get('desc')?.dirty || questionForm.get('desc')?.touched)">
+                  <small *ngIf="questionForm.get('desc')?.errors?.['required']">Opis jest wymagany.</small>
+                </div>
+              </div>
+              <div>
+                <button type="submit" [disabled]="questionForm.invalid">Wyślij</button>
               </div>
             </form>
           </div>

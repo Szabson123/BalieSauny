@@ -25,4 +25,7 @@ export class FaqService {
   togglePublishStatus(faqId: number): Observable<any> {
     return this.http.patch(`${this.apiUrl}/manage/${faqId}/status/`, {});
   }
+  askQuestion(questionData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/question/`, questionData);
+  }
 }

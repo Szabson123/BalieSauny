@@ -41,7 +41,7 @@ class DiscountSerializer(serializers.ModelSerializer):
 class FaqQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Faq
-        fields = ['id', 'question']
+        fields = ['id', 'question'] 
 
 class FaqSerializer(serializers.ModelSerializer):
     class Meta:
