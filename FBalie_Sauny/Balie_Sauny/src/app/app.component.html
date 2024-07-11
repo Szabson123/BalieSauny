@@ -2,15 +2,14 @@
   <nav>
     <ul class="navbar">
       <li><a routerLink="/" (click)="scrollToTop()"><img class="logo" src="assets/images/123.png" alt="Background"></a></li>
-      <li><a routerLink="/about">About</a></li>
-      <li><a routerLink="/shop">Shop</a></li>
-      <li><a routerLink="/add-tub">Dodaj Balie</a></li>
-      <li><a routerLink="/reservations-to-accept">Rezerwacje</a></li>
-      <!-- <li><img class="icon" src="cart.png" alt=""></li> -->
-      <li *ngIf="!isLoggedIn"><a id="Login" routerLink="/login">Zaloguj się</a></li>
+      <li><a routerLink="/about" (click)="scrollToTop()">About</a></li>
+      <li><a routerLink="/shop" (click)="scrollToTop()">Shop</a></li>
+      <li *ngIf="isAdmin"><a routerLink="/add-tub" (click)="scrollToTop()">Dodaj Balie</a></li>
+      <li *ngIf="isAdmin"><a routerLink="/reservations-to-accept" (click)="scrollToTop()">Rezerwacje</a></li>
+      <li *ngIf="!isLoggedIn"><a id="Login" routerLink="/login" (click)="scrollToTop()">Zaloguj się</a></li>
       <li *ngIf="isLoggedIn"><a id="Logout" (click)="logout()">Wyloguj się</a></li>
-      <li *ngIf="isLoggedIn"><a routerLink="/profile">Profil</a></li>
+      <li *ngIf="isLoggedIn"><a routerLink="/profile" (click)="scrollToTop()">Profil</a></li>
     </ul>
-  </nav>     
+  </nav>
 </header>
 <router-outlet></router-outlet>

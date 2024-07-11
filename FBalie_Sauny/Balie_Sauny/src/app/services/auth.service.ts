@@ -1,4 +1,4 @@
-import { Injectable, ChangeDetectorRef } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -11,18 +11,25 @@ export class AuthService {
   private baseUrl = 'http://localhost:8000';
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
-  
+  private isManagerSubject: BehaviorSubject<boolean>;
+  public isManager: Observable<boolean>;
 
   constructor(
     private http: HttpClient,
-     private router: Router
+    private router: Router
   ) {
     this.currentUserSubject = new BehaviorSubject<any>(localStorage.getItem('access_token'));
     this.currentUser = this.currentUserSubject.asObservable();
+    this.isManagerSubject = new BehaviorSubject<boolean>(false);
+    this.isManager = this.isManagerSubject.asObservable();
   }
 
   public get currentUserValue(): any {
     return this.currentUserSubject.value;
+  }
+
+  public get isManagerValue(): boolean {
+    return this.isManagerSubject.value;
   }
 
   login(username: string, password: string) {
@@ -31,6 +38,7 @@ export class AuthService {
         localStorage.setItem('access_token', response.access);
         localStorage.setItem('refresh_token', response.refresh);
         this.currentUserSubject.next(response.access);
+        this.getProfile().subscribe(); // Pobieramy profil po zalogowaniu
       })
     );
   }
@@ -44,6 +52,7 @@ export class AuthService {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     this.currentUserSubject.next(null);
+    this.isManagerSubject.next(false);
     this.router.navigate(['/login']);
   }
 
@@ -54,6 +63,15 @@ export class AuthService {
       tap((response) => {
         localStorage.setItem('access_token', response.access);
         this.currentUserSubject.next(response.access);
+      })
+    );
+  }
+
+  getProfile() {
+    return this.http.get<any>(`${this.baseUrl}/api/profile/`).pipe(
+      tap(profile => {
+        console.log('getProfile: profile:', profile); // Dodajemy logowanie
+        this.isManagerSubject.next(profile.is_manager);
       })
     );
   }
