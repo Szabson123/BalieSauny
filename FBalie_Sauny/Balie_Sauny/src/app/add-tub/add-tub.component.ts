@@ -21,7 +21,6 @@ export class AddTubComponent {
       name: ['', Validators.required],
       description: ['', Validators.required],
       price_per_day: ['', [Validators.required, Validators.min(0)]],
-      price_per_week: ['', [Validators.required, Validators.min(0)]],
       logo_img: [null, Validators.required]
     });
   }
